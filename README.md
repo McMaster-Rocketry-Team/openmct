@@ -5,6 +5,36 @@
 - **AGENTS.md** — added a developer guide covering project structure, build commands, test setup, and conventions. See [AGENTS.md](./AGENTS.md).
 - **Line plot gap detection** — the line plot series now supports a `gapThreshold` option. When set to a value greater than `0` (milliseconds), consecutive data points separated by more than the threshold — and whose gap spans at least 2 pixels on screen — are rendered as a break in the line rather than an interpolated segment. Configurable per-series via the inspector UI ("Gap Threshold (ms)") or programmatically. See the [Plot Plugin section in API.md](./API.md#plot-plugin) for full documentation.
 
+## Installing this fork
+
+This fork is published to the [GitHub Packages npm registry](https://github.com/orgs/McMaster-Rocketry-Team/packages/npm/package/openmct) as `@mcmaster-rocketry-team/openmct`.
+
+**npm:**
+
+```bash
+npm install @mcmaster-rocketry-team/openmct --registry=https://npm.pkg.github.com
+```
+
+**yarn:**
+
+Add a `.npmrc` file to your project root (yarn reads this for scoped registry resolution):
+
+```
+@mcmaster-rocketry-team:registry=https://npm.pkg.github.com
+```
+
+Then install:
+
+```bash
+yarn add @mcmaster-rocketry-team/openmct
+```
+
+**Usage** is identical to the upstream `openmct` package — just change the import:
+
+```js
+import openmct from '@mcmaster-rocketry-team/openmct';
+```
+
 ---
 
 Open MCT (Open Mission Control Technologies) is a next-generation mission control framework for visualization of data on desktop and mobile devices. It is developed at NASA's Ames Research Center, and is being used by NASA for data analysis of spacecraft missions, as well as planning and operation of experimental rover systems. As a generalizable and open source framework, Open MCT could be used as the basis for building applications for planning, operation, and analysis of any systems producing telemetry data.
