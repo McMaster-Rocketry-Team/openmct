@@ -247,8 +247,9 @@ class DrawWebGL extends EventEmitter {
    *        the line, as an RGBA color where each element
    *        is in the range of 0.0-1.0
    * @param {number} points the number of points to draw
-   * @param {number} [gapThreshold] minimum x-delta that constitutes a gap;
-   *        0 or undefined disables gap detection
+   * @param {number} [gapThreshold] minimum x-delta (in logical units) that
+   *        constitutes a gap; a gap is only rendered if the x-delta also spans
+   *        >= 2 pixels on screen. 0 or undefined disables gap detection.
    */
   drawLine(buf, color, points, gapThreshold) {
     if (this.isContextLost) {
@@ -264,7 +265,11 @@ class DrawWebGL extends EventEmitter {
     // Split into contiguous segments separated by gaps and draw each one.
     let segmentStart = 0;
     for (let i = 1; i < points; i++) {
-      if (buf[i * 2] - buf[(i - 1) * 2] > gapThreshold) {
+      const xDelta = buf[i * 2] - buf[(i - 1) * 2];
+      if (
+        xDelta > gapThreshold &&
+        this.x(buf[i * 2]) - this.x(buf[(i - 1) * 2]) >= 2
+      ) {
         const segmentLength = i - segmentStart;
         if (segmentLength > 1) {
           this.doDraw(

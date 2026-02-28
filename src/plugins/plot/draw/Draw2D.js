@@ -97,7 +97,12 @@ class Draw2D extends EventEmitter {
 
     // ...and add points to it, breaking the path when a gap is detected...
     for (i = 2; i < points * 2; i = i + 2) {
-      if (gapThreshold > 0 && buf[i] - buf[i - 2] > gapThreshold) {
+      const xDelta = buf[i] - buf[i - 2];
+      if (
+        gapThreshold > 0 &&
+        xDelta > gapThreshold &&
+        this.x(buf[i]) - this.x(buf[i - 2]) >= 2
+      ) {
         this.c2d.stroke();
         this.c2d.beginPath();
         this.c2d.moveTo(this.x(buf[i]), this.y(buf[i + 1]));
