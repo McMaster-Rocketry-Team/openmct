@@ -1,5 +1,5 @@
 {
-  "name": "@mcmaster-rocketry-team/openmct",
+  "name": "openmct",
   "version": "4.3.0-rc1",
   "description": "The Open MCT core platform",
   "module": "dist/openmct.js",
@@ -134,9 +134,6 @@
     "prepare": "npm run build:prod && npx tsc"
   },
   "homepage": "https://nasa.github.io/openmct",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/McMaster-Rocketry-Team/openmct.git"
