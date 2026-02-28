@@ -963,7 +963,7 @@ export default {
           chartElement.getBuffer(),
           chartElement.color().asRGBAArray(),
           chartElement.count,
-          disconnected
+          chartElement.series.get('gapThreshold')
         );
       }
     },

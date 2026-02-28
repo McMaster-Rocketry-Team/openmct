@@ -247,13 +247,48 @@ class DrawWebGL extends EventEmitter {
    *        the line, as an RGBA color where each element
    *        is in the range of 0.0-1.0
    * @param {number} points the number of points to draw
+   * @param {number} [gapThreshold] minimum x-delta that constitutes a gap;
+   *        0 or undefined disables gap detection
    */
-  drawLine(buf, color, points) {
+  drawLine(buf, color, points, gapThreshold) {
     if (this.isContextLost) {
       return;
     }
 
-    this.doDraw(this.gl.LINE_STRIP, buf, color, points);
+    if (!gapThreshold || gapThreshold <= 0) {
+      this.doDraw(this.gl.LINE_STRIP, buf, color, points);
+
+      return;
+    }
+
+    // Split into contiguous segments separated by gaps and draw each one.
+    let segmentStart = 0;
+    for (let i = 1; i < points; i++) {
+      if (buf[i * 2] - buf[(i - 1) * 2] > gapThreshold) {
+        const segmentLength = i - segmentStart;
+        if (segmentLength > 1) {
+          this.doDraw(
+            this.gl.LINE_STRIP,
+            buf.subarray(segmentStart * 2, i * 2),
+            color,
+            segmentLength
+          );
+        }
+
+        segmentStart = i;
+      }
+    }
+
+    // Draw the final segment.
+    const remainingLength = points - segmentStart;
+    if (remainingLength > 1) {
+      this.doDraw(
+        this.gl.LINE_STRIP,
+        buf.subarray(segmentStart * 2, points * 2),
+        color,
+        remainingLength
+      );
+    }
   }
   /**
    * Draw the buffer as points.

@@ -50,6 +50,10 @@ import Model from './Model.js';
  * `markerShape`: string, shape of markers.
  * `markerSize`: number, size in pixels of markers for this series.
  * `alarmMarkers`: whether or not to display alarm markers for this series.
+ * `gapThreshold`: number, the minimum x-axis gap (in the same units as the
+ *                 x-axis, typically milliseconds) that should be treated as a
+ *                 data gap and rendered as a break in the line rather than an
+ *                 interpolated segment. Set to 0 to disable gap detection.
  * `stats`: An object that tracks the min and max y values observed in this
  *          series.  This property is checked and updated whenever data is
  *          added.
@@ -128,6 +132,7 @@ export default class PlotSeries extends Model {
       markerSize: 2.0,
       alarmMarkers: true,
       limitLines: false,
+      gapThreshold: 0,
       yAxisId: options.model.yAxisId || 1
     };
   }

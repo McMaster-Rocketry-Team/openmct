@@ -65,6 +65,23 @@
           </select>
         </div>
       </li>
+      <li v-show="interpolate !== 'none'" class="grid-row">
+        <div
+          class="grid-cell label"
+          title="Minimum gap in the x-axis (milliseconds) to render as a break in the line. Set to 0 to disable gap detection."
+        >
+          Gap Threshold (ms)
+        </div>
+        <div class="grid-cell value">
+          <input
+            v-model="gapThreshold"
+            class="c-input--flex"
+            type="number"
+            min="0"
+            @change="updateForm('gapThreshold')"
+          />
+        </div>
+      </li>
       <li class="grid-row">
         <div class="grid-cell label" title="Whether markers are displayed.">Markers</div>
         <div class="grid-cell value">
@@ -162,6 +179,7 @@ export default {
       yKey: this.series.get('yKey'),
       yKeyOptions: [],
       interpolate: this.series.get('interpolate'),
+      gapThreshold: this.series.get('gapThreshold'),
       markers: this.series.get('markers'),
       markerShape: this.series.get('markerShape'),
       alarmMarkers: this.series.get('alarmMarkers'),
@@ -231,6 +249,11 @@ export default {
         {
           modelProp: 'interpolate',
           objectPath: this.dynamicPathForKey('interpolate')
+        },
+        {
+          modelProp: 'gapThreshold',
+          coerce: Number,
+          objectPath: this.dynamicPathForKey('gapThreshold')
         },
         {
           modelProp: 'markers',

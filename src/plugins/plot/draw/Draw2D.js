@@ -81,7 +81,7 @@ class Draw2D extends EventEmitter {
     this.dimensions = newDimensions;
     this.origin = newOrigin;
   }
-  drawLine(buf, color, points) {
+  drawLine(buf, color, points, gapThreshold) {
     let i;
 
     this.setColor(color);
@@ -95,9 +95,15 @@ class Draw2D extends EventEmitter {
       this.c2d.moveTo(this.x(buf[0]), this.y(buf[1]));
     }
 
-    // ...and add points to it...
+    // ...and add points to it, breaking the path when a gap is detected...
     for (i = 2; i < points * 2; i = i + 2) {
-      this.c2d.lineTo(this.x(buf[i]), this.y(buf[i + 1]));
+      if (gapThreshold > 0 && buf[i] - buf[i - 2] > gapThreshold) {
+        this.c2d.stroke();
+        this.c2d.beginPath();
+        this.c2d.moveTo(this.x(buf[i]), this.y(buf[i + 1]));
+      } else {
+        this.c2d.lineTo(this.x(buf[i]), this.y(buf[i + 1]));
+      }
     }
 
     // ...before finally drawing it.
