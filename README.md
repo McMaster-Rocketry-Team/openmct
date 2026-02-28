@@ -1,5 +1,12 @@
 # Open MCT [![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) [![codecov](https://codecov.io/gh/nasa/openmct/branch/master/graph/badge.svg?token=7DQIipp3ej)](https://codecov.io/gh/nasa/openmct) [![This project is using Percy.io for visual regression testing.](https://percy.io/static/images/percy-badge.svg)](https://percy.io/b2e34b17/openmct) [![npm version](https://img.shields.io/npm/v/openmct.svg)](https://www.npmjs.com/package/openmct) ![CodeQL](https://github.com/nasa/openmct/workflows/CodeQL/badge.svg)
 
+## Changes from upstream
+
+- **AGENTS.md** — added a developer guide covering project structure, build commands, test setup, and conventions. See [AGENTS.md](./AGENTS.md).
+- **Line plot gap detection** — the line plot series now supports a `gapThreshold` option. When set to a value greater than `0` (milliseconds), consecutive data points separated by more than the threshold — and whose gap spans at least 2 pixels on screen — are rendered as a break in the line rather than an interpolated segment. Configurable per-series via the inspector UI ("Gap Threshold (ms)") or programmatically. See the [Plot Plugin section in API.md](./API.md#plot-plugin) for full documentation.
+
+---
+
 Open MCT (Open Mission Control Technologies) is a next-generation mission control framework for visualization of data on desktop and mobile devices. It is developed at NASA's Ames Research Center, and is being used by NASA for data analysis of spacecraft missions, as well as planning and operation of experimental rover systems. As a generalizable and open source framework, Open MCT could be used as the basis for building applications for planning, operation, and analysis of any systems producing telemetry data.
 
 > [!NOTE]
