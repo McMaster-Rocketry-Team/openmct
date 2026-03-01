@@ -132,7 +132,7 @@ export default class PlotSeries extends Model {
       markerSize: 2.0,
       alarmMarkers: true,
       limitLines: false,
-      gapThreshold: 0,
+      gapThreshold: range.gapThreshold ?? 0,
       yAxisId: options.model.yAxisId || 1
     };
   }
