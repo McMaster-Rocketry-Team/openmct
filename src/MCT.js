@@ -398,7 +398,7 @@ export class MCT extends EventEmitter {
    * have been installed.
    * @fires module:openmct.MCT~start
    * @method start
-   * @param {Element?} domElementOrSelector the DOM element in which to run
+   * @param {Element?} [domElementOrSelector] the DOM element in which to run
    *        MCT; if undefined, MCT will be run in the body of the document
    */
   start(domElementOrSelector, isHeadlessMode = false) {

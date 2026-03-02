@@ -29,13 +29,15 @@ const UNKNOWN_TYPE = new Type({
 
 /**
  * @typedef TypeDefinition
- * @property {string} label the name for this type of object
- * @property {string} description a longer-form description of this type
- * @property {function(domainObject:DomainObject): void} [initialize] a function which initializes
- *           the model for new domain objects of this type
- * @property {boolean} [creatable=false] true if users should be allowed to
- *           create this type (default: false)
+ * @property {string} [label] the name for this type of object (preferred)
+ * @property {string} [name] the name for this type of object (legacy, use label instead)
+ * @property {string} [description] a longer-form description of this type
+ * @property {(domainObject: DomainObject) => void} [initialize] a function which initializes the model for new domain objects of this type
+ * @property {boolean} [creatable] true if users should be allowed to create this type (default: false)
  * @property {string} [cssClass] the CSS class to apply for icons
+ * @property {string} [key] the key for this type
+ * @property {Form} [form] form configuration for this type
+ * @property {Telemetry} [telemetry] telemetry configuration for this type
  */
 
 /**
