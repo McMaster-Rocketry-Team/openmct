@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": false,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.js",
+    "openmct.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "test-results",
+    ".nyc_output"
+  ]
+}
