@@ -26,6 +26,7 @@
  */
 
 // import { createDomainObjectWithDefaults } from './appActions.ts';
+import type { Page, TestInfo } from '@playwright/test';
 import { fileURLToPath } from 'url';
 
 import { expect, request, test } from './baseFixtures.ts';
@@ -35,6 +36,18 @@ import { expect, request, test } from './baseFixtures.ts';
  * @property {string} type
  * @property {string} name
  */
+
+declare module '@playwright/test' {
+  interface Page {
+    testNotes: string;
+  }
+}
+
+type PluginFixtures = {
+  theme: string;
+  myItemsFolderName: string;
+  openmctConfig: { myItemsFolderName: string };
+};
 
 /**
  * **NOTE: This feature is a work-in-progress and should not currently be used.**
@@ -117,11 +130,11 @@ const theme = 'espresso';
  */
 const myItemsFolderName = 'My Items';
 
-const extendedTest = test.extend({
+const extendedTest = test.extend<PluginFixtures>({
   // This should follow in the Project's configuration. Can be set to 'snow' in playwright config.js
   theme: [theme, { option: true }],
   // eslint-disable-next-line no-shadow
-  page: async ({ page, theme }, use, testInfo) => {
+  page: async ({ page, theme }: { page: Page; theme: string }, use: (r: Page) => Promise<void>, testInfo: TestInfo) => {
     if (theme === 'snow') {
       //inject snow theme
       await page.addInitScript({
@@ -143,7 +156,7 @@ const extendedTest = test.extend({
   },
   myItemsFolderName: [myItemsFolderName, { option: true }],
   // eslint-disable-next-line no-shadow
-  openmctConfig: async ({ myItemsFolderName }, use) => {
+  openmctConfig: async ({ myItemsFolderName }: { myItemsFolderName: string }, use: (r: { myItemsFolderName: string }) => Promise<void>) => {
     await use({ myItemsFolderName });
   }
 });
@@ -155,7 +168,7 @@ export { expect, request, extendedTest as test };
  * @param {ReadableStream} readable - the readable stream
  * @return {Promise<String>} the stringified stream
  */
-export async function streamToString(readable) {
+export async function streamToString(readable: AsyncIterable<string | Buffer>): Promise<string> {
   let result = '';
   for await (const chunk of readable) {
     result += chunk;

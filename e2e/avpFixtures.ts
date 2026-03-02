@@ -34,6 +34,8 @@
  */
 
 import AxeBuilder from '@axe-core/playwright';
+import type { AxeResults } from 'axe-core';
+import type { Page, PageScreenshotOptions } from '@playwright/test';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -67,7 +69,7 @@ const extendedTest = test.extend({
      * @param {import('@playwright/test').PageScreenshotOptions} options - The options for the screenshot.
      * @returns {Promise<Buffer>} Returns the screenshot as a buffer.
      */
-    page.screenshot = async function (options = {}) {
+    page.screenshot = async function (this: Page, options: PageScreenshotOptions = {}) {
       const mask = [
         this.getByLabel('Clock Indicator'), // Mask the clock indicator
         this.getByLabel('Last update'), // Mask the time conductor last update time in realtime mode
@@ -95,7 +97,7 @@ const extendedTest = test.extend({
  * @returns {Promise<Object>} The accessibility scan results.
  * @throws Will throw an error if writing the report fails.
  */
-async function writeAccessibilityReport(reportPath, accessibilityScanResults) {
+async function writeAccessibilityReport(reportPath: string, accessibilityScanResults: AxeResults): Promise<AxeResults> {
   try {
     await fs.mkdir(path.dirname(reportPath), { recursive: true });
     const data = JSON.stringify(accessibilityScanResults, null, 2);
@@ -118,7 +120,7 @@ async function writeAccessibilityReport(reportPath, accessibilityScanResults) {
  * @returns {Promise<Object|null>} Returns the accessibility scan results if violations are found, otherwise returns null.
  */
 
-export async function scanForA11yViolations(page, testCaseName, options = {}) {
+export async function scanForA11yViolations(page: Page, testCaseName: string, options: { reportName?: string } = {}): Promise<AxeResults | null> {
   const builder = new AxeBuilder({ page });
   builder.withTags(['wcag2aa']);
   // https://github.com/dequelabs/axe-core/blob/develop/doc/rule-descriptions.md
