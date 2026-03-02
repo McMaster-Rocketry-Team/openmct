@@ -22,6 +22,7 @@
 import fs from 'fs';
 
 import { createDomainObjectWithDefaults, createPlanFromJSON } from '../../../appActions.ts';
+import type { CreatedObjectInfo } from '../../../appActions.ts';
 import {
   assertPlanActivities,
   setBoundsToSpanAllActivities
@@ -31,17 +32,17 @@ import { expect, test } from '../../../pluginFixtures.ts';
 const testPlan1 = JSON.parse(
   fs.readFileSync(
     new URL('../../../test-data/examplePlans/ExamplePlan_Small1.json', import.meta.url)
-  )
+  ).toString()
 );
 const testPlan2 = JSON.parse(
   fs.readFileSync(
     new URL('../../../test-data/examplePlans/ExamplePlan_Small2.json', import.meta.url)
-  )
+  ).toString()
 );
 
 test.describe('Gantt Chart', () => {
-  let ganttChart;
-  let plan;
+  let ganttChart: CreatedObjectInfo;
+  let plan: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
     ganttChart = await createDomainObjectWithDefaults(page, {
@@ -80,7 +81,7 @@ test.describe('Gantt Chart', () => {
 
     await setBoundsToSpanAllActivities(page, testPlan1, ganttChart.url);
 
-    const activities = Object.values(testPlan1).flat();
+    const activities = Object.values(testPlan1).flat() as { name: string; start: number; end: number }[];
     const activity = activities[0];
     await page
       .locator('g')
@@ -119,7 +120,8 @@ test.describe('Gantt Chart', () => {
 
     // Mark the Plan's status as draft in the OpenMCT API
     await page.evaluate(async (planObject) => {
-      await window.openmct.status.set(planObject.uuid, 'draft');
+      const identifier = window.openmct.objects.parseKeyString(planObject.uuid);
+      await window.openmct.status.set(identifier, 'draft');
     }, plan);
 
     // Navigate to the Gantt Chart
@@ -137,26 +139,26 @@ const ONE_MINUTE = 60 * ONE_SECOND;
 const ONE_HOUR = ONE_MINUTE * 60;
 const ONE_DAY = ONE_HOUR * 24;
 
-function normalizeAge(num) {
+function normalizeAge(num: number) {
   const hundredtized = num * 100;
   const isWhole = hundredtized % 100 === 0;
 
   return isWhole ? hundredtized / 100 : num;
 }
 
-function padLeadingZeros(num, numOfLeadingZeros) {
+function padLeadingZeros(num: number, numOfLeadingZeros: number) {
   return num.toString().padStart(numOfLeadingZeros, '0');
 }
 
-function toDoubleDigits(num) {
+function toDoubleDigits(num: number) {
   return padLeadingZeros(num, 2);
 }
 
-function toTripleDigits(num) {
+function toTripleDigits(num: number) {
   return padLeadingZeros(num, 3);
 }
 
-function getPreciseDuration(value, { excludeMilliSeconds, useDayFormat } = {}) {
+function getPreciseDuration(value: number, { excludeMilliSeconds = false, useDayFormat = false } = {}) {
   let preciseDuration;
   const ms = value || 0;
 
@@ -172,14 +174,14 @@ function getPreciseDuration(value, { excludeMilliSeconds, useDayFormat } = {}) {
 
   if (useDayFormat) {
     // Format days as XD
-    const days = duration.shift();
-    if (days > 0) {
+    const days = duration.shift()!;
+    if (Number(days) > 0) {
       preciseDuration = `${days}D ${duration.join(':')}`;
     } else {
       preciseDuration = duration.join(':');
     }
   } else {
-    const days = toDoubleDigits(duration.shift());
+    const days = toDoubleDigits(Number(duration.shift()));
     duration.unshift(days);
     preciseDuration = duration.join(':');
   }

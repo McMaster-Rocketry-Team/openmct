@@ -25,10 +25,11 @@ import {
   navigateToObjectWithRealTime,
   setTimeConductorBounds
 } from '../../../../appActions.ts';
+import type { CreatedObjectInfo } from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Telemetry Table', () => {
-  let table;
+  let table: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
     table = await createDomainObjectWithDefaults(page, { type: 'Telemetry Table' });
@@ -112,8 +113,8 @@ test.describe('Telemetry Table', () => {
 
     // Subtract 5 minutes from the current end bound datetime and set it
     // Bring up the time conductor popup
-    let endTimeStamp = await page.getByLabel('End bounds').textContent();
-    endTimeStamp = new Date(endTimeStamp);
+    const endTimeStampText = await page.getByLabel('End bounds').textContent();
+    const endTimeStamp = new Date(endTimeStampText!);
 
     endTimeStamp.setUTCMinutes(endTimeStamp.getUTCMinutes() - 5);
     const endDate = endTimeStamp.toISOString().split('T')[0];
@@ -132,8 +133,8 @@ test.describe('Telemetry Table', () => {
       .getAttribute('title');
 
     // Verify that it is <= our new end bound
-    const latestMilliseconds = Date.parse(latestTelemetryDate);
-    const endBoundMilliseconds = Date.parse(endTimeStamp);
+    const latestMilliseconds = Date.parse(latestTelemetryDate!);
+    const endBoundMilliseconds = endTimeStamp.getTime();
     expect(latestMilliseconds).toBeLessThanOrEqual(endBoundMilliseconds);
   });
 
@@ -222,12 +223,12 @@ test.describe('Telemetry Table', () => {
   });
 });
 
-async function getScrollPosition(page, top = true) {
+async function getScrollPosition(page: import('@playwright/test').Page, top = true) {
   const tableBody = page.locator('.c-table__body-w');
 
   // Wait for the scrollbar to appear
   await tableBody.evaluate((node) => {
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       function checkScroll() {
         if (node.scrollHeight > node.clientHeight) {
           resolve();
@@ -247,7 +248,7 @@ async function getScrollPosition(page, top = true) {
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(1000);
 
-  const { scrollTop, clientHeight, scrollHeight } = await tableBody.evaluate((node) => ({
+  const { scrollTop, clientHeight, scrollHeight } = await tableBody.evaluate((node: Element) => ({
     scrollTop: node.scrollTop,
     clientHeight: node.clientHeight,
     scrollHeight: node.scrollHeight

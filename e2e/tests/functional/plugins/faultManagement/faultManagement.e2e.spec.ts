@@ -87,19 +87,19 @@ test.describe('The Fault Management Plugin using example faults', () => {
 
   test('Allows you to shelve a fault', async ({ page }) => {
     const shelvedFaultName = await getFaultName(page, 2);
-    const beforeShelvedFault = getFaultByName(page, shelvedFaultName);
+    const beforeShelvedFault = getFaultByName(page, shelvedFaultName!);
 
     await expect(beforeShelvedFault).toHaveCount(1);
 
     await shelveFault(page, 2);
 
     // check it is removed from standard view
-    const afterShelvedFault = getFaultByName(page, shelvedFaultName);
+    const afterShelvedFault = getFaultByName(page, shelvedFaultName!);
     await expect(afterShelvedFault).toHaveCount(0);
 
     await changeViewTo(page, 'shelved');
 
-    const shelvedViewFault = getFaultByName(page, shelvedFaultName);
+    const shelvedViewFault = getFaultByName(page, shelvedFaultName!);
 
     await expect(shelvedViewFault).toHaveCount(1);
   });
@@ -122,8 +122,8 @@ test.describe('The Fault Management Plugin using example faults', () => {
     const shelvedFaultNameOne = await getFaultName(page, 1);
     const shelvedFaultNameFour = await getFaultName(page, 4);
 
-    const beforeShelvedFaultOne = getFaultByName(page, shelvedFaultNameOne);
-    const beforeShelvedFaultFour = getFaultByName(page, shelvedFaultNameFour);
+    const beforeShelvedFaultOne = getFaultByName(page, shelvedFaultNameOne!);
+    const beforeShelvedFaultFour = getFaultByName(page, shelvedFaultNameFour!);
 
     await expect(beforeShelvedFaultOne).toHaveCount(1);
     await expect(beforeShelvedFaultFour).toHaveCount(1);
@@ -131,15 +131,15 @@ test.describe('The Fault Management Plugin using example faults', () => {
     await shelveMultipleFaults(page, 1, 4);
 
     // check it is removed from standard view
-    const afterShelvedFaultOne = getFaultByName(page, shelvedFaultNameOne);
-    const afterShelvedFaultFour = getFaultByName(page, shelvedFaultNameFour);
+    const afterShelvedFaultOne = getFaultByName(page, shelvedFaultNameOne!);
+    const afterShelvedFaultFour = getFaultByName(page, shelvedFaultNameFour!);
     await expect(afterShelvedFaultOne).toHaveCount(0);
     await expect(afterShelvedFaultFour).toHaveCount(0);
 
     await changeViewTo(page, 'shelved');
 
-    const shelvedViewFaultOne = getFaultByName(page, shelvedFaultNameOne);
-    const shelvedViewFaultFour = getFaultByName(page, shelvedFaultNameFour);
+    const shelvedViewFaultOne = getFaultByName(page, shelvedFaultNameOne!);
+    const shelvedViewFaultFour = getFaultByName(page, shelvedFaultNameFour!);
 
     await expect(shelvedViewFaultOne).toHaveCount(1);
     await expect(shelvedViewFaultFour).toHaveCount(1);
@@ -160,8 +160,8 @@ test.describe('The Fault Management Plugin using example faults', () => {
 
     await changeViewTo(page, 'acknowledged');
 
-    const acknowledgedViewFaultTwo = getFaultByName(page, acknowledgedFaultNameTwo);
-    const acknowledgedViewFaultFive = getFaultByName(page, acknowledgedFaultNameFive);
+    const acknowledgedViewFaultTwo = getFaultByName(page, acknowledgedFaultNameTwo!);
+    const acknowledgedViewFaultFive = getFaultByName(page, acknowledgedFaultNameFive!);
 
     await expect(acknowledgedViewFaultTwo).toHaveCount(1);
     await expect(acknowledgedViewFaultFive).toHaveCount(1);
@@ -179,7 +179,7 @@ test.describe('The Fault Management Plugin using example faults', () => {
     await page
       .getByLabel('Fault Management Object View')
       .getByLabel('Search Input')
-      .fill(faultThreeNamespace);
+      .fill(faultThreeNamespace!);
 
     await expect(page.getByLabel('Fault triggered at')).toHaveCount(1);
     expect(await getFaultNamespace(page, 1)).toEqual(faultThreeNamespace);
@@ -192,7 +192,7 @@ test.describe('The Fault Management Plugin using example faults', () => {
     await page
       .getByLabel('Fault Management Object View')
       .getByLabel('Search Input')
-      .fill(faultTwoName);
+      .fill(faultTwoName!);
 
     await expect(page.getByLabel('Fault triggered at')).toHaveCount(1);
     expect(await getFaultName(page, 1)).toEqual(faultTwoName);
@@ -222,7 +222,7 @@ test.describe('The Fault Management Plugin using example faults', () => {
      *                     or 0 if they are equally severe.
      */
     // eslint-disable-next-line func-style
-    const compareSeverity = (severity1, severity2) => {
+    const compareSeverity = (severity1: string, severity2: string) => {
       const severityOrder = ['WATCH', 'WARNING', 'CRITICAL'];
       return severityOrder.indexOf(severity1) - severityOrder.indexOf(severity2);
     };
@@ -244,13 +244,13 @@ test.describe('The Fault Management Plugin using example faults', () => {
       .getByLabel('Severity:')
       .first()
       .getAttribute('aria-label');
-    const firstFaultSeverity = firstFaultSeverityLabel.split(' ').slice(1).join(' ');
+    const firstFaultSeverity = firstFaultSeverityLabel!.split(' ').slice(1).join(' ');
 
     const lastFaultSeverityLabel = await page
       .getByLabel('Severity:')
       .last()
       .getAttribute('aria-label');
-    const lastFaultSeverity = lastFaultSeverityLabel.split(' ').slice(1).join(' ');
+    const lastFaultSeverity = lastFaultSeverityLabel!.split(' ').slice(1).join(' ');
 
     expect(compareSeverity(firstFaultSeverity, lastFaultSeverity)).toBeGreaterThan(0);
   });

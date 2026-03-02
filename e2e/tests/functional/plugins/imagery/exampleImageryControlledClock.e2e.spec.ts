@@ -32,6 +32,7 @@ import {
   setRealTimeMode,
   setStartOffset
 } from '../../../../appActions.ts';
+import type { CreatedObjectInfo } from '../../../../appActions.ts';
 import { MISSION_TIME } from '../../../../constants.ts';
 import {
   createImageryViewWithShortDelay,
@@ -93,7 +94,7 @@ test.describe('Example Imagery Object with Controlled Clock @clock', () => {
     // go forward in time to ensure old images are discarded
     await page.clock.fastForward(IMAGE_LOAD_DELAY);
     await page.clock.resume();
-    await expect(page.getByLabel(lastImageTimestamp)).toBeHidden();
+    await expect(page.getByLabel(lastImageTimestamp!)).toBeHidden();
 
     // go way forward in time to ensure multiple images are discarded
     const IMAGES_TO_DISCARD_COUNT = 5;
@@ -114,8 +115,8 @@ test.describe('Example Imagery Object with Controlled Clock @clock', () => {
     await page.clock.fastForward(IMAGE_LOAD_DELAY * IMAGES_TO_DISCARD_COUNT);
     await page.clock.resume();
 
-    await expect(page.getByLabel(lastImageToDiscardTimestamp)).toBeHidden();
-    await expect(page.getByLabel(imageAfterLastImageToDiscardTimestamp)).toBeVisible();
+    await expect(page.getByLabel(lastImageToDiscardTimestamp!)).toBeHidden();
+    await expect(page.getByLabel(imageAfterLastImageToDiscardTimestamp!)).toBeVisible();
   });
 
   test('Get background-image url from background-image css prop', async ({ page }) => {
@@ -186,7 +187,7 @@ test.describe('Example Imagery in Display Layout with Controlled Clock @clock', 
     // go forward in time to ensure old images are discarded
     await page.clock.fastForward(IMAGE_LOAD_DELAY);
     await page.clock.resume();
-    await expect(page.getByLabel(lastImageTimestamp)).toBeHidden();
+    await expect(page.getByLabel(lastImageTimestamp!)).toBeHidden();
 
     // go way forward in time to ensure multiple images are discarded
     const IMAGES_TO_DISCARD_COUNT = 5;
@@ -207,8 +208,8 @@ test.describe('Example Imagery in Display Layout with Controlled Clock @clock', 
     await page.clock.fastForward(IMAGE_LOAD_DELAY * IMAGES_TO_DISCARD_COUNT);
     await page.clock.resume();
 
-    await expect(page.getByLabel(lastImageToDiscardTimestamp)).toBeHidden();
-    await expect(page.getByLabel(imageAfterLastImageToDiscardTimestamp)).toBeVisible();
+    await expect(page.getByLabel(lastImageToDiscardTimestamp!)).toBeHidden();
+    await expect(page.getByLabel(imageAfterLastImageToDiscardTimestamp!)).toBeVisible();
   });
 
   test('Get background-image url from background-image css prop @clock', async ({ page }) => {
@@ -266,7 +267,7 @@ test.describe('Example Imagery in Flexible layout with Controlled Clock @clock',
     // go forward in time to ensure old images are discarded
     await page.clock.fastForward(IMAGE_LOAD_DELAY);
     await page.clock.resume();
-    await expect(page.getByLabel(lastImageTimestamp)).toBeHidden();
+    await expect(page.getByLabel(lastImageTimestamp!)).toBeHidden();
 
     // go way forward in time to ensure multiple images are discarded
     const IMAGES_TO_DISCARD_COUNT = 5;
@@ -287,8 +288,8 @@ test.describe('Example Imagery in Flexible layout with Controlled Clock @clock',
     await page.clock.fastForward(IMAGE_LOAD_DELAY * IMAGES_TO_DISCARD_COUNT);
     await page.clock.resume();
 
-    await expect(page.getByLabel(lastImageToDiscardTimestamp)).toBeHidden();
-    await expect(page.getByLabel(imageAfterLastImageToDiscardTimestamp)).toBeVisible();
+    await expect(page.getByLabel(lastImageToDiscardTimestamp!)).toBeHidden();
+    await expect(page.getByLabel(imageAfterLastImageToDiscardTimestamp!)).toBeVisible();
   });
 
   test('Get background-image url from background-image css prop @clock', async ({ page }) => {
@@ -297,7 +298,7 @@ test.describe('Example Imagery in Flexible layout with Controlled Clock @clock',
 });
 
 test.describe('Example Imagery in Tabs View with Controlled Clock @clock', () => {
-  let timeStripObject;
+  let timeStripObject: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // We mock the clock so that we don't need to wait for time driven events
@@ -357,7 +358,7 @@ test.describe('Example Imagery in Tabs View with Controlled Clock @clock', () =>
     // go forward in time to ensure old images are discarded
     await page.clock.fastForward(IMAGE_LOAD_DELAY);
     await page.clock.resume();
-    await expect(page.getByLabel(lastImageTimestamp)).toBeHidden();
+    await expect(page.getByLabel(lastImageTimestamp!)).toBeHidden();
 
     // go way forward in time to ensure multiple images are discarded
     const IMAGES_TO_DISCARD_COUNT = 5;
@@ -378,8 +379,8 @@ test.describe('Example Imagery in Tabs View with Controlled Clock @clock', () =>
     await page.clock.fastForward(IMAGE_LOAD_DELAY * IMAGES_TO_DISCARD_COUNT);
     await page.clock.resume();
 
-    await expect(page.getByLabel(lastImageToDiscardTimestamp)).toBeHidden();
-    await expect(page.getByLabel(imageAfterLastImageToDiscardTimestamp)).toBeVisible();
+    await expect(page.getByLabel(lastImageToDiscardTimestamp!)).toBeHidden();
+    await expect(page.getByLabel(imageAfterLastImageToDiscardTimestamp!)).toBeVisible();
   });
 
   test('Get background-image url from background-image css prop @clock', async ({ page }) => {
@@ -388,7 +389,7 @@ test.describe('Example Imagery in Tabs View with Controlled Clock @clock', () =>
 });
 
 test.describe('Example Imagery in Time Strip with Controlled Clock @clock', () => {
-  let timeStripObject;
+  let timeStripObject: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // We mock the clock so that we don't need to wait for time driven events
@@ -448,7 +449,7 @@ test.describe('Example Imagery in Time Strip with Controlled Clock @clock', () =
     // go forward in time to ensure old images are discarded
     await page.clock.fastForward(IMAGE_LOAD_DELAY);
     await page.clock.resume();
-    await expect(page.getByLabel(lastImageTimestamp)).toBeHidden();
+    await expect(page.getByLabel(lastImageTimestamp!)).toBeHidden();
 
     // go way forward in time to ensure multiple images are discarded
     const IMAGES_TO_DISCARD_COUNT = 5;
@@ -465,21 +466,21 @@ test.describe('Example Imagery in Time Strip with Controlled Clock @clock', () =
     await page.clock.fastForward(IMAGE_LOAD_DELAY * IMAGES_TO_DISCARD_COUNT);
     await page.clock.resume();
 
-    await expect(page.getByLabel(lastImageToDiscardTimestamp)).toBeHidden();
-    await expect(page.getByLabel(imageAfterLastImageToDiscardTimestamp)).toBeVisible();
+    await expect(page.getByLabel(lastImageToDiscardTimestamp!)).toBeHidden();
+    await expect(page.getByLabel(imageAfterLastImageToDiscardTimestamp!)).toBeVisible();
   });
 });
 
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function assertBackgroundImageUrlFromBackgroundCss(page) {
+async function assertBackgroundImageUrlFromBackgroundCss(page: import('@playwright/test').Page) {
   const backgroundImage = page.getByLabel('Focused Image Element');
-  const backgroundImageUrl = await backgroundImage.evaluate((el) => {
+  const backgroundImageUrl = await backgroundImage.evaluate((el: Element) => {
     return window
       .getComputedStyle(el)
       .getPropertyValue('background-image')
-      .match(/url\(([^)]+)\)/)[1];
+      .match(/url\(([^)]+)\)/)![1];
   });
 
   // go forward in time to ensure old images are discarded
