@@ -44,7 +44,7 @@
  */
 
 // Structure: Some standard Imports. Please update the required pathing.
-import { createDomainObjectWithDefaults, createExampleTelemetryObject } from '../../appActions.ts';
+import { createDomainObjectWithDefaults, createExampleTelemetryObject , type CreatedObjectInfo} from '../../appActions.ts';
 import { expect, test } from '../../pluginFixtures.ts';
 
 /**
@@ -56,7 +56,7 @@ import { expect, test } from '../../pluginFixtures.ts';
 test.describe('Example - Renaming Timer Object', () => {
   // Top-level declaration of the Timer object created in beforeEach().
   // We can then use this throughout the entire test suite.
-  let timer;
+  let timer: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     // Open a browser, navigate to the main page, and wait until all network events to resolve
     await page.goto('./', { waitUntil: 'domcontentloaded' });
@@ -118,7 +118,7 @@ test.describe('Example - Renaming Timer Object', () => {
  * and we have developed a great pattern for working with it.
  */
 test.describe('Advanced Example - Working with telemetry objects', () => {
-  let displayLayout;
+  let displayLayout: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
 

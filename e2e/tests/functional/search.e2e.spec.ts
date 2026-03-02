@@ -23,13 +23,14 @@
  * This test suite is dedicated to tests which verify search functionalities.
  */
 
+import type { Locator } from '@playwright/test';
 import { v4 as uuid } from 'uuid';
 
 import { createDomainObjectWithDefaults } from '../../appActions.ts';
 import { expect, test } from '../../pluginFixtures.ts';
 
 test.describe('Grand Search', () => {
-  let grandSearchInput;
+  let grandSearchInput: Locator;
 
   test.use({ ignore404s: [/_design\/object_names\/_view\/object_names$/] });
 

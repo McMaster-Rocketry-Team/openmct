@@ -29,11 +29,11 @@ import {
   createDomainObjectWithDefaults,
   getCanvasPixels,
   setRealTimeMode
-} from '../../../../appActions.ts';
+, type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Plot Rendering', () => {
-  let sineWaveGeneratorObject;
+  let sineWaveGeneratorObject: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // Open a browser, navigate to the main page, and wait until all networkevents to resolve

@@ -24,11 +24,11 @@
  * This test suite verifies modifying the image location of the example imagery object.
  */
 
-import { createDomainObjectWithDefaults } from '../../../../appActions.ts';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Example Imagery Object Custom Images', () => {
-  let exampleImagery;
+  let exampleImagery: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     //Go to baseURL
     await page.goto('./', { waitUntil: 'domcontentloaded' });

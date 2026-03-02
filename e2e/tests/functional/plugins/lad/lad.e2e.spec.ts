@@ -27,12 +27,12 @@ import {
   setFixedTimeMode,
   setRealTimeMode,
   setStartOffset
-} from '../../../../appActions.ts';
+, type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Testing LAD table configuration', () => {
-  let ladTable;
-  let sineWaveObject;
+  let ladTable: CreatedObjectInfo;
+  let sineWaveObject: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
 
@@ -235,7 +235,7 @@ test.describe('Testing LAD table configuration', () => {
 });
 
 test.describe('Testing LAD table', () => {
-  let sineWaveObject;
+  let sineWaveObject: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
 

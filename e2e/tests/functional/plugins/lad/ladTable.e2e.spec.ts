@@ -20,12 +20,12 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
-import { createDomainObjectWithDefaults } from '../../../../appActions.ts';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('LAD Table', () => {
-  let ladTable;
-  let swg;
+  let ladTable: CreatedObjectInfo;
+  let swg: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });

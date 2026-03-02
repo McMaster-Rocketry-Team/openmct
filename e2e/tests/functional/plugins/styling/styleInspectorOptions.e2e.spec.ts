@@ -24,11 +24,11 @@
  * This test is dedicated to test styling changes in the inspector tool
  */
 
-import { createDomainObjectWithDefaults } from '../../../../appActions.ts';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Style Inspector Options', () => {
-  let flexibleLayout;
+  let flexibleLayout: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
 

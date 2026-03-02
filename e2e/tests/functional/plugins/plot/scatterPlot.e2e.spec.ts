@@ -26,11 +26,11 @@
 
 import { v4 as uuid } from 'uuid';
 
-import { createDomainObjectWithDefaults } from '../../../../appActions.ts';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Scatter Plot', () => {
-  let scatterPlot;
+  let scatterPlot: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // Open a browser, navigate to the main page, and wait until all networkevents to resolve

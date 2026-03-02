@@ -19,23 +19,24 @@
  * this source code distribution or the Licensing information page available
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
+import type { Locator } from '@playwright/test';
 import { expect, test } from '../../../baseFixtures.ts';
 
 test.describe('Status Area', () => {
-  let viewportHeight;
-  let viewportWidth;
-  let expandButton;
-  let collapseButton;
-  let singleLineButton;
-  let multiLineButton;
-  let indicatorsContainer;
-  let firstIndicator;
+  let viewportHeight: number;
+  let viewportWidth: number;
+  let expandButton: Locator;
+  let collapseButton: Locator;
+  let singleLineButton: Locator;
+  let multiLineButton: Locator;
+  let indicatorsContainer: Locator;
+  let firstIndicator: Locator;
   let indicatorsContainerLeftPosition;
-  let indicatorsContainerWidth;
-  let indicatorsContainerHeight;
+  let indicatorsContainerWidth: number;
+  let indicatorsContainerHeight: number;
   let indicatorsContainerRightPosition;
-  let firstIndicatorPosition;
-  let indicatorsWidth;
+  let firstIndicatorPosition: number;
+  let indicatorsWidth: number;
 
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });

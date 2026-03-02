@@ -24,7 +24,7 @@
  * This test is dedicated to test styling of stacked plots
  */
 
-import { createDomainObjectWithDefaults } from '../../../../appActions.ts';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../../../appActions.ts';
 import {
   checkFontStyles,
   checkStyles,
@@ -44,7 +44,7 @@ const setFontWeight = '700'; //bold for monospace bold
 const setFontFamily = '"Andale Mono", sans-serif';
 
 test.describe('Stacked Plot styling', () => {
-  let stackedPlot;
+  let stackedPlot: CreatedObjectInfo;
   let overlayPlot1;
   let overlayPlot2;
   test.beforeEach(async ({ page }) => {

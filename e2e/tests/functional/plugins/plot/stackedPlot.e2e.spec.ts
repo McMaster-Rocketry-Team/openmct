@@ -25,14 +25,14 @@ Tests to verify log plot functionality. Note this test suite if very much under 
 necessarily be used for reference when writing new tests in this area.
 */
 
-import { createDomainObjectWithDefaults, waitForPlotsToRender } from '../../../../appActions.ts';
+import { createDomainObjectWithDefaults, waitForPlotsToRender , type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Stacked Plot', () => {
-  let stackedPlot;
-  let swgA;
-  let swgB;
-  let swgC;
+  let stackedPlot: CreatedObjectInfo;
+  let swgA: CreatedObjectInfo;
+  let swgB: CreatedObjectInfo;
+  let swgC: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // Open a browser, navigate to the main page, and wait until all networkevents to resolve

@@ -27,14 +27,14 @@ import {
   createDomainObjectWithDefaults,
   linkParameterToObject,
   setRealTimeMode
-} from '../../../../appActions.ts';
+, type CreatedObjectInfo} from '../../../../appActions.ts';
 import { MISSION_TIME } from '../../../../constants.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Conditionally Styling, using a Condition Set', () => {
-  let stateGenerator;
-  let conditionSet;
-  let displayLayout;
+  let stateGenerator: CreatedObjectInfo;
+  let conditionSet: CreatedObjectInfo;
+  let displayLayout: CreatedObjectInfo;
   const STATE_CHANGE_INTERVAL = '1';
 
   test.beforeEach(async ({ page }) => {

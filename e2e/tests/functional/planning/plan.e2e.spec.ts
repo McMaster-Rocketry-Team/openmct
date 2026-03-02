@@ -21,7 +21,7 @@
  *****************************************************************************/
 import fs from 'fs';
 
-import { createPlanFromJSON, navigateToObjectWithFixedTimeBounds } from '../../../appActions.ts';
+import { createPlanFromJSON, navigateToObjectWithFixedTimeBounds , type CreatedObjectInfo} from '../../../appActions.ts';
 import {
   addPlanGetInterceptor,
   assertPlanActivities,
@@ -42,7 +42,7 @@ const testPlanWithOrderedLanes = JSON.parse(
 );
 
 test.describe('Plan', () => {
-  let plan;
+  let plan: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
     plan = await createPlanFromJSON(page, {

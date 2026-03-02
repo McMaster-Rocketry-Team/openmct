@@ -32,7 +32,7 @@ const TEST_TEXT = 'Testing text for entries.';
 const TEST_TEXT_NAME = 'Test Page';
 
 test.describe('Restricted Notebook', () => {
-  let notebook;
+  let notebook: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     notebook = await startAndAddRestrictedNotebookObject(page);
   });
@@ -70,7 +70,7 @@ test.describe('Restricted Notebook', () => {
 });
 
 test.describe('Restricted Notebook with at least one entry and with the page locked @addInit', () => {
-  let notebook;
+  let notebook: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     notebook = await startAndAddRestrictedNotebookObject(page);
     await enterTextEntry(page, TEST_TEXT);

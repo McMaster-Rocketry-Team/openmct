@@ -29,11 +29,11 @@ import {
   createDomainObjectWithDefaults,
   createExampleTelemetryObject,
   setRealTimeMode
-} from '../../../../appActions.ts';
+, type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Basic Condition Set Use', () => {
-  let conditionSet;
+  let conditionSet: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // Open a browser, navigate to the main page, and wait until all network events to resolve
@@ -421,8 +421,8 @@ test.describe('Basic Condition Set Use', () => {
 });
 
 test.describe('Condition Set Composition', () => {
-  let conditionSet;
-  let exampleTelemetry;
+  let conditionSet: CreatedObjectInfo;
+  let exampleTelemetry: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });

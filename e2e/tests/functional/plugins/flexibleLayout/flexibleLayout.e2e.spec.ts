@@ -20,12 +20,13 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
+import type { Locator } from '@playwright/test';
 import { fileURLToPath } from 'url';
 
 import {
   createDomainObjectWithDefaults,
   setFixedIndependentTimeConductorBounds
-} from '../../../../appActions.ts';
+, type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 const LOCALSTORAGE_PATH = fileURLToPath(
@@ -33,12 +34,12 @@ const LOCALSTORAGE_PATH = fileURLToPath(
 );
 
 test.describe('Flexible Layout', () => {
-  let sineWaveObject;
+  let sineWaveObject: CreatedObjectInfo;
   let clockObject;
-  let treePane;
-  let sineWaveGeneratorTreeItem;
-  let clockTreeItem;
-  let flexibleLayout;
+  let treePane: Locator;
+  let sineWaveGeneratorTreeItem: CreatedObjectInfo;
+  let clockTreeItem: Locator;
+  let flexibleLayout: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
 

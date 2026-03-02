@@ -26,7 +26,7 @@
 
 import percySnapshot from '@percy/playwright';
 
-import { createDomainObjectWithDefaults } from '../../appActions.ts';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../appActions.ts';
 import { scanForA11yViolations, test } from '../../avpFixtures.ts';
 import { setStyles } from '../../helper/stylingUtils.ts';
 
@@ -35,7 +35,7 @@ const setBackgroundColor = '#5b0f00';
 const setTextColor = '#e6b8af';
 
 test.describe('Flexible Layout styling @a11y', () => {
-  let flexibleLayout;
+  let flexibleLayout: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
 
@@ -117,7 +117,7 @@ test.describe('Flexible Layout styling @a11y', () => {
 });
 
 test.describe('Stacked Plot styling @a11y', () => {
-  let stackedPlot;
+  let stackedPlot: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
 

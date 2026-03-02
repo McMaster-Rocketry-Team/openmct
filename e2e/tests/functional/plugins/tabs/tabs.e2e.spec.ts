@@ -20,14 +20,14 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
-import { createDomainObjectWithDefaults } from '../../../../appActions.ts';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Tabs View', () => {
-  let tabsView;
-  let table;
-  let notebook;
-  let sineWaveGenerator;
+  let tabsView: CreatedObjectInfo;
+  let table: CreatedObjectInfo;
+  let notebook: CreatedObjectInfo;
+  let sineWaveGenerator: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
@@ -127,7 +127,7 @@ test.describe('Tabs View', () => {
 });
 
 test.describe('Tabs View CRUD', () => {
-  let tabsView;
+  let tabsView: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });

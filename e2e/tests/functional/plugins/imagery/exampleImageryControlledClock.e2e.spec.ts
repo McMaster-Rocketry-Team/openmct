@@ -31,7 +31,7 @@ import {
   navigateToObjectWithRealTime,
   setRealTimeMode,
   setStartOffset
-} from '../../../../appActions.ts';
+, type CreatedObjectInfo} from '../../../../appActions.ts';
 import type { CreatedObjectInfo } from '../../../../appActions.ts';
 import { MISSION_TIME } from '../../../../constants.ts';
 import {
@@ -125,7 +125,7 @@ test.describe('Example Imagery Object with Controlled Clock @clock', () => {
 });
 
 test.describe('Example Imagery in Display Layout with Controlled Clock @clock', () => {
-  let displayLayout;
+  let displayLayout: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // We mock the clock so that we don't need to wait for time driven events
@@ -218,7 +218,7 @@ test.describe('Example Imagery in Display Layout with Controlled Clock @clock', 
 });
 
 test.describe('Example Imagery in Flexible layout with Controlled Clock @clock', () => {
-  let flexibleLayout;
+  let flexibleLayout: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // We mock the clock so that we don't need to wait for time driven events

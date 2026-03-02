@@ -31,11 +31,11 @@ import {
   setEndOffset,
   setRealTimeMode,
   setStartOffset
-} from '../../../../appActions.ts';
+, type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Plot Controls', () => {
-  let overlayPlot;
+  let overlayPlot: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // Open a browser, navigate to the main page, and wait until all networkevents to resolve

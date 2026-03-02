@@ -32,7 +32,7 @@ const OVERLAY_PLOT_NAME = 'Overlay Plot';
 const STACKED_PLOT_NAME = 'Stacked Plot';
 
 test.describe('For a default Plot View, Plot View Action:', () => {
-  let download;
+  let download: Download;
 
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
@@ -82,7 +82,7 @@ test.describe('For a default Plot View, Plot View Action:', () => {
 });
 
 test.describe('For an Overlay Plot View, Plot View Action:', () => {
-  let download;
+  let download: Download;
 
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
@@ -138,7 +138,7 @@ test.describe('For an Overlay Plot View, Plot View Action:', () => {
 });
 
 test.describe('For a Stacked Plot View, Plot View Action:', () => {
-  let download;
+  let download: Download;
 
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
@@ -194,7 +194,7 @@ test.describe('For a Stacked Plot View, Plot View Action:', () => {
 });
 
 test.describe('Plot View Action:', () => {
-  let download;
+  let download: Download;
 
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });

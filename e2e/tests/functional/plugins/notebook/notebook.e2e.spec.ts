@@ -29,7 +29,7 @@ import { fileURLToPath } from 'url';
 import {
   createDomainObjectWithDefaults,
   renameCurrentObjectFromBrowseBar
-} from '../../../../appActions.ts';
+, type CreatedObjectInfo} from '../../../../appActions.ts';
 import { copy, paste, selectAll } from '../../../../helper/hotkeys/hotkeys.ts';
 import * as nbUtils from '../../../../helper/notebookUtils.ts';
 import { expect, streamToString, test } from '../../../../pluginFixtures.ts';
@@ -279,7 +279,7 @@ test.describe('Notebook search tests', () => {
 
 test.describe('Notebook entry tests', () => {
   // Create Notebook with URL Whitelist
-  let notebookObject;
+  let notebookObject: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.addInitScript({
       path: fileURLToPath(new URL('../../../../helper/addInitNotebookWithUrls.js', import.meta.url))

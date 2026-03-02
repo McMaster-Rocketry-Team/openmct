@@ -26,13 +26,13 @@ This test suite is dedicated to tests which verify search functionality.
 
 import percySnapshot from '@percy/playwright';
 
-import { createDomainObjectWithDefaults } from '../../appActions.ts';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../appActions.ts';
 import { expect, scanForA11yViolations, test } from '../../avpFixtures.ts';
 import { VISUAL_FIXED_URL } from '../../constants.ts';
 
 test.describe('Grand Search @a11y', () => {
-  let conditionWidget;
-  let displayLayout;
+  let conditionWidget: CreatedObjectInfo;
+  let displayLayout: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto(VISUAL_FIXED_URL, { waitUntil: 'domcontentloaded' });
 

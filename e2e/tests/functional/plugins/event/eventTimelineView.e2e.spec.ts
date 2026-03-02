@@ -20,12 +20,12 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
-import { createDomainObjectWithDefaults, setTimeConductorBounds } from '../../../../appActions.ts';
+import { createDomainObjectWithDefaults, setTimeConductorBounds , type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Event Timeline View', () => {
-  let eventTimelineView;
-  let eventGenerator1;
+  let eventTimelineView: CreatedObjectInfo;
+  let eventGenerator1: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });

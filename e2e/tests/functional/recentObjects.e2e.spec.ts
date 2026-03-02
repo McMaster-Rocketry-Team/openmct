@@ -20,17 +20,18 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
-import { createDomainObjectWithDefaults } from '../../appActions.ts';
+import type { Locator } from '@playwright/test';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../appActions.ts';
 import { waitForAnimations } from '../../baseFixtures.ts';
 import { expect, test } from '../../pluginFixtures.ts';
 
 test.describe('Recent Objects', () => {
-  /** @type {import('@playwright/test').Locator} */
-  let recentObjectsList;
-  /** @type {import('@playwright/test').Locator} */
-  let clock;
-  /** @type {import('@playwright/test').Locator} */
-  let folderA;
+
+  let recentObjectsList: Locator;
+
+  let clock: CreatedObjectInfo;
+
+  let folderA: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
 

@@ -21,14 +21,14 @@
  *****************************************************************************/
 import percySnapshot from '@percy/playwright';
 
-import { createDomainObjectWithDefaults, setRealTimeMode } from '../../appActions.ts';
+import { createDomainObjectWithDefaults, setRealTimeMode , type CreatedObjectInfo} from '../../appActions.ts';
 import { waitForAnimations } from '../../baseFixtures.ts';
 import { VISUAL_FIXED_URL } from '../../constants.ts';
 import { expect, test } from '../../pluginFixtures.ts';
 
 test.describe('Visual - Example Imagery', () => {
-  let exampleImagery;
-  let parentLayout;
+  let exampleImagery: CreatedObjectInfo;
+  let parentLayout: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     await page.goto(VISUAL_FIXED_URL, { waitUntil: 'domcontentloaded' });

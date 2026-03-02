@@ -30,7 +30,7 @@ import { fileURLToPath } from 'url';
 import {
   createDomainObjectWithDefaults,
   createExampleTelemetryObject
-} from '../../../../appActions.ts';
+, type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 let conditionSetUrl;
@@ -213,7 +213,7 @@ test.describe.serial('Condition Set CRUD Operations on @localStorage @2p', () =>
 });
 
 test.describe('Basic Condition Set Use', () => {
-  let conditionSet;
+  let conditionSet: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // Open a browser, navigate to the main page, and wait until all network events to resolve
@@ -471,8 +471,8 @@ test.describe('Basic Condition Set Use', () => {
 });
 
 test.describe('Condition Set Composition', () => {
-  let conditionSet;
-  let exampleTelemetry;
+  let conditionSet: CreatedObjectInfo;
+  let exampleTelemetry: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });

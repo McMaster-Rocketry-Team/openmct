@@ -22,12 +22,12 @@
 
 import percySnapshot from '@percy/playwright';
 
-import { createDomainObjectWithDefaults } from '../../appActions.ts';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../appActions.ts';
 import { VISUAL_FIXED_URL } from '../../constants.ts';
 import { expect, test } from '../../pluginFixtures.ts';
 
 test.describe('Visual - Telemetry Views', () => {
-  let telemetry;
+  let telemetry: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     await page.goto(VISUAL_FIXED_URL, { waitUntil: 'domcontentloaded' });

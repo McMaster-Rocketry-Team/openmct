@@ -26,12 +26,12 @@ This test suite is dedicated to tests which verify the basic operations surround
 
 import fs from 'fs/promises';
 
-import { createDomainObjectWithDefaults } from '../../../../appActions.ts';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../baseFixtures.ts';
 import { navigateToFaultManagementWithExample } from '../../../../helper/faultUtils.ts';
 
 test.describe('ExportAsJSON', () => {
-  let folder;
+  let folder: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     // Go to baseURL
     await page.goto('./');
@@ -155,7 +155,7 @@ test.describe('ExportAsJSON Disabled Actions', () => {
   });
 });
 test.describe('ExportAsJSON ProgressBar @couchdb', () => {
-  let folder;
+  let folder: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
     // Perform actions to create the domain object

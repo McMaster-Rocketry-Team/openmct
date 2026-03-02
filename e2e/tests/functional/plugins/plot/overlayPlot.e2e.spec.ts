@@ -29,11 +29,11 @@ import {
   createDomainObjectWithDefaults,
   getCanvasPixels,
   waitForPlotsToRender
-} from '../../../../appActions.ts';
+, type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Overlay Plot', () => {
-  let overlayPlot;
+  let overlayPlot: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
     overlayPlot = await createDomainObjectWithDefaults(page, {

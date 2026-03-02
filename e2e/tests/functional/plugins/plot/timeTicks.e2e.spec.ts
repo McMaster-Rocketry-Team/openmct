@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-import { createDomainObjectWithDefaults, setTimeConductorBounds } from '../../../../appActions.ts';
+import { createDomainObjectWithDefaults, setTimeConductorBounds , type CreatedObjectInfo} from '../../../../appActions.ts';
 
 test.describe('Time Tick Generation', () => {
   // Test cases will go here
-  let sineWaveGeneratorObject;
+  let sineWaveGeneratorObject: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // Open a browser, navigate to the main page, and wait until all networkevents to resolve

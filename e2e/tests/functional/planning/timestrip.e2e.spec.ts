@@ -27,7 +27,7 @@ import {
   setFixedIndependentTimeConductorBounds,
   setFixedTimeMode,
   setTimeConductorBounds
-} from '../../../appActions.ts';
+, type CreatedObjectInfo} from '../../../appActions.ts';
 import { expect, test } from '../../../pluginFixtures.ts';
 
 const testPlan = {
@@ -76,8 +76,8 @@ const testPlan = {
 };
 
 test.describe('Time Strip', () => {
-  let timestrip;
-  let plan;
+  let timestrip: CreatedObjectInfo;
+  let plan: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // Goto baseURL

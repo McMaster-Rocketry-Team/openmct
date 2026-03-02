@@ -22,7 +22,7 @@
 
 import percySnapshot from '@percy/playwright';
 
-import { createDomainObjectWithDefaults } from '../../appActions.ts';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../appActions.ts';
 import { expect, scanForA11yViolations, test } from '../../avpFixtures.ts';
 import { VISUAL_FIXED_URL } from '../../constants.ts';
 import { enterTextEntry, startAndAddRestrictedNotebookObject } from '../../helper/notebookUtils.ts';
@@ -79,7 +79,7 @@ test.describe('Visual - Notebook Snapshot @a11y', () => {
 });
 
 test.describe('Visual - Notebook @a11y', () => {
-  let notebook;
+  let notebook: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto(VISUAL_FIXED_URL, { waitUntil: 'domcontentloaded' });
     notebook = await createDomainObjectWithDefaults(page, {

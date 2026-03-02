@@ -30,12 +30,12 @@ This test suite is dedicated to tests which verify the basic operations surround
  */
 /* eslint-disable playwright/no-networkidle */
 
-import { createDomainObjectWithDefaults } from '../../../../appActions.ts';
+import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../../../appActions.ts';
 import * as nbUtils from '../../../../helper/notebookUtils.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Notebook Tests with CouchDB @couchdb @network', () => {
-  let testNotebook;
+  let testNotebook: CreatedObjectInfo;
 
   test.beforeEach(async ({ page }) => {
     // Navigate to baseURL

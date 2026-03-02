@@ -25,7 +25,7 @@ import { fileURLToPath } from 'url';
 import {
   createDomainObjectWithDefaults,
   navigateToObjectWithRealTime
-} from '../../../../../appActions.ts';
+, type CreatedObjectInfo} from '../../../../../appActions.ts';
 import { expect, test } from '../../../../../pluginFixtures.ts';
 
 const TINY_IMAGE_BASE64 =
@@ -38,7 +38,7 @@ test.describe('Display Layout Conditional Styling', () => {
     )
   });
 
-  let displayLayout;
+  let displayLayout: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
     displayLayout = await createDomainObjectWithDefaults(page, {
