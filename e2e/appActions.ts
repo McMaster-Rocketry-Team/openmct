@@ -53,9 +53,21 @@
  * @property {import('../src/api/notifications/NotificationAPI').NotificationOptions} [notificationOptions] additional options
  */
 
-import { expect } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { Buffer } from 'buffer';
 import { v4 as genUuid } from 'uuid';
+
+declare global {
+  interface Window {
+    openmct: any;
+  }
+}
+
+export interface CreatedObjectInfo {
+  name: string;
+  uuid: string;
+  url: string;
+}
 
 /**
  * This common function creates a domain object with the default options. It is the preferred way of creating objects
@@ -69,10 +81,10 @@ import { v4 as genUuid } from 'uuid';
  * @returns {Promise<CreatedObjectInfo>} An object containing information about the newly created domain object.
  */
 async function createDomainObjectWithDefaults(
-  page,
-  { type, name, parent = 'mine' },
-  additionalOptions = {}
-) {
+  page: Page,
+  { type, name, parent = 'mine' }: { type: string; name?: string; parent?: string },
+  additionalOptions: Record<string, string> = {}
+): Promise<CreatedObjectInfo> {
   if (!name) {
     name = `${type}:${genUuid()}`;
   }
@@ -132,7 +144,10 @@ async function createDomainObjectWithDefaults(
  * @param {import('@playwright/test').Page} page
  * @param {CreateNotificationOptions} createNotificationOptions
  */
-async function createNotification(page, createNotificationOptions) {
+async function createNotification(
+  page: Page,
+  createNotificationOptions: { message: string; severity: string; options?: object }
+) {
   await page.evaluate((_createNotificationOptions) => {
     const { message, severity, options } = _createNotificationOptions;
     const notificationApi = window.openmct.notifications;
@@ -156,7 +171,10 @@ async function createNotification(page, createNotificationOptions) {
  * @param {string | import('../src/api/objects/ObjectAPI').Identifier} [parent] the uuid or identifier of the parent object. Defaults to 'mine'
  * @returns {Promise<CreatedObjectInfo>} An object containing information about the newly created domain object.
  */
-async function createPlanFromJSON(page, { name, json, parent = 'mine' }) {
+async function createPlanFromJSON(
+  page: Page,
+  { name, json, parent = 'mine' }: { name?: string; json: object; parent?: string }
+): Promise<CreatedObjectInfo> {
   const parentUrl = await getHashUrlToDomainObject(page, parent);
 
   // Navigate to the parent object. This is necessary to create the object
@@ -202,7 +220,10 @@ async function createPlanFromJSON(page, { name, json, parent = 'mine' }) {
  * @param {string | import('../src/api/objects/ObjectAPI').Identifier} [parent] the uuid or identifier of the parent object. Defaults to 'mine'
  * @returns {Promise<CreatedObjectInfo>} An object containing information about the telemetry object.
  */
-async function createExampleTelemetryObject(page, parent = 'mine') {
+async function createExampleTelemetryObject(
+  page: Page,
+  parent: string = 'mine'
+): Promise<CreatedObjectInfo> {
   const parentUrl = await getHashUrlToDomainObject(page, parent);
 
   await page.goto(`${parentUrl}`);
@@ -245,7 +266,10 @@ async function createExampleTelemetryObject(page, parent = 'mine') {
  * @param {string | import('../src/api/objects/ObjectAPI').Identifier} [parent] the uuid or identifier of the parent object. Defaults to 'mine'
  * @returns {Promise<CreatedObjectInfo>} An object containing information about the telemetry object.
  */
-async function createStableStateTelemetry(page, parent = 'mine') {
+async function createStableStateTelemetry(
+  page: Page,
+  parent: string = 'mine'
+): Promise<CreatedObjectInfo> {
   const parentUrl = await getHashUrlToDomainObject(page, parent);
 
   await page.goto(`${parentUrl}`);
@@ -278,7 +302,12 @@ async function createStableStateTelemetry(page, parent = 'mine') {
  * @param {string | number} start The starting time bound in milliseconds since epoch
  * @param {string | number} end The ending time bound in milliseconds since epoch
  */
-async function navigateToObjectWithFixedTimeBounds(page, url, start, end) {
+async function navigateToObjectWithFixedTimeBounds(
+  page: Page,
+  url: string,
+  start: string | number,
+  end: string | number
+) {
   await page.goto(
     `${url}?tc.mode=fixed&tc.timeSystem=utc&tc.startBound=${start}&tc.endBound=${end}`
   );
@@ -293,7 +322,12 @@ async function navigateToObjectWithFixedTimeBounds(page, url, start, end) {
  * @param {string | number} start The start offset in milliseconds
  * @param {string | number} end The end offset in milliseconds
  */
-async function navigateToObjectWithRealTime(page, url, start = '1800000', end = '30000') {
+async function navigateToObjectWithRealTime(
+  page: Page,
+  url: string,
+  start: string | number = '1800000',
+  end: string | number = '30000'
+) {
   await page.goto(
     `${url}?tc.mode=local&tc.startDelta=${start}&tc.endDelta=${end}&tc.timeSystem=utc`
   );
@@ -307,7 +341,7 @@ async function navigateToObjectWithRealTime(page, url, start = '1800000', end = 
  * @param {import('@playwright/test').Page} page
  * @param {"Main Tree" | "Create Modal Tree"} [treeName="Main Tree"]
  */
-async function expandEntireTree(page, treeName = 'Main Tree') {
+async function expandEntireTree(page: Page, treeName: string = 'Main Tree') {
   const treeLocator = page.getByRole('tree', {
     name: treeName
   });
@@ -335,10 +369,10 @@ async function expandEntireTree(page, treeName = 'Main Tree') {
  * @param {import('@playwright/test').Page} page
  * @returns {Promise<string>} the uuid of the focused object
  */
-async function getFocusedObjectUuid(page) {
+async function getFocusedObjectUuid(page: Page): Promise<string> {
   const UUIDv4Regexp = /[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/gi;
   const focusedObjectUuid = await page.evaluate((regexp) => {
-    return window.location.href.split('?')[0].match(regexp).at(-1);
+    return window.location.href.split('?')[0].match(regexp)!.at(-1)!;
   }, UUIDv4Regexp);
 
   return focusedObjectUuid;
@@ -354,7 +388,7 @@ async function getFocusedObjectUuid(page) {
  * @param {string | import('../src/api/objects/ObjectAPI').Identifier} identifier the uuid or identifier of the object to get the url for
  * @returns {Promise<string>} the url of the object
  */
-async function getHashUrlToDomainObject(page, identifier) {
+async function getHashUrlToDomainObject(page: Page, identifier: string): Promise<string> {
   await page.waitForLoadState('domcontentloaded');
   const hashUrl = await page.evaluate(async (objectIdentifier) => {
     const path = await window.openmct.objects.getOriginalPath(objectIdentifier);
@@ -383,7 +417,7 @@ async function getHashUrlToDomainObject(page, identifier) {
  * @param {string | import('../src/api/objects/ObjectAPI').Identifier} identifier
  * @return {Promise<boolean>} true if the Open MCT is in Edit Mode
  */
-async function _isInEditMode(page, identifier) {
+async function _isInEditMode(page: Page, identifier: string) {
   // eslint-disable-next-line no-return-await
   return await page.evaluate(() => window.openmct.editor.isEditing());
 }
@@ -394,7 +428,7 @@ async function _isInEditMode(page, identifier) {
  * @param {import('@playwright/test').Page} page
  * @param {boolean} [isFixedTimespan=true] true for fixed timespan mode, false for realtime mode; default is true
  */
-async function _setTimeConductorMode(page, isFixedTimespan = true) {
+async function _setTimeConductorMode(page: Page, isFixedTimespan: boolean = true) {
   // Click 'mode' button
   await page.getByRole('button', { name: 'Time Conductor Mode', exact: true }).click();
   await page.getByRole('button', { name: 'Time Conductor Mode Menu' }).click();
@@ -414,7 +448,7 @@ async function _setTimeConductorMode(page, isFixedTimespan = true) {
  * Set the time conductor to fixed timespan mode
  * @param {import('@playwright/test').Page} page
  */
-async function setFixedTimeMode(page) {
+async function setFixedTimeMode(page: Page) {
   await _setTimeConductorMode(page, true);
 }
 
@@ -422,7 +456,7 @@ async function setFixedTimeMode(page) {
  * Set the time conductor to realtime mode
  * @param {import('@playwright/test').Page} page
  */
-async function setRealTimeMode(page) {
+async function setRealTimeMode(page: Page) {
   await _setTimeConductorMode(page, false);
 }
 
@@ -443,8 +477,24 @@ async function setRealTimeMode(page) {
  * @param {boolean} [offset.submitChanges=true] - If true, submit the offset changes; otherwise, discard them
  */
 async function setTimeConductorOffset(
-  page,
-  { startHours, startMins, startSecs, endHours, endMins, endSecs, submitChanges = true }
+  page: Page,
+  {
+    startHours,
+    startMins,
+    startSecs,
+    endHours,
+    endMins,
+    endSecs,
+    submitChanges = true
+  }: {
+    startHours?: string;
+    startMins?: string;
+    startSecs?: string;
+    endHours?: string;
+    endMins?: string;
+    endSecs?: string;
+    submitChanges?: boolean;
+  }
 ) {
   if (startHours) {
     await page.getByLabel('Start offset hours').fill(startHours);
@@ -484,7 +534,21 @@ async function setTimeConductorOffset(
  * @param {OffsetValues} offset
  * @param {boolean} [submit=true] If true, submit the offset changes; otherwise, discard them
  */
-async function setStartOffset(page, { submitChanges = true, ...offset }) {
+async function setStartOffset(
+  page: Page,
+  {
+    submitChanges = true,
+    ...offset
+  }: {
+    submitChanges?: boolean;
+    startHours?: string;
+    startMins?: string;
+    startSecs?: string;
+    endHours?: string;
+    endMins?: string;
+    endSecs?: string;
+  }
+) {
   // Click 'mode' button
   await page.getByRole('button', { name: 'Time Conductor Mode', exact: true }).click();
   await setTimeConductorOffset(page, { submitChanges, ...offset });
@@ -496,7 +560,21 @@ async function setStartOffset(page, { submitChanges = true, ...offset }) {
  * @param {OffsetValues} offset
  * @param {boolean} [submit=true] If true, submit the offset changes; otherwise, discard them
  */
-async function setEndOffset(page, { submitChanges = true, ...offset }) {
+async function setEndOffset(
+  page: Page,
+  {
+    submitChanges = true,
+    ...offset
+  }: {
+    submitChanges?: boolean;
+    startHours?: string;
+    startMins?: string;
+    startSecs?: string;
+    endHours?: string;
+    endMins?: string;
+    endSecs?: string;
+  }
+) {
   // Click 'mode' button
   await page.getByRole('button', { name: 'Time Conductor Mode', exact: true }).click();
   await setTimeConductorOffset(page, { submitChanges, ...offset });
@@ -515,7 +593,19 @@ async function setEndOffset(page, { submitChanges = true, ...offset }) {
  * @param {string} [bounds.endTime] - The end time in HH:mm:ss format
  * @param {boolean} [bounds.submitChanges=true] - If true, submit the changes; otherwise, discard them.
  */
-async function setTimeConductorBounds(page, { submitChanges = true, ...bounds }) {
+async function setTimeConductorBounds(
+  page: Page,
+  {
+    submitChanges = true,
+    ...bounds
+  }: {
+    submitChanges?: boolean;
+    startDate?: string;
+    endDate?: string;
+    startTime?: string;
+    endTime?: string;
+  }
+) {
   const { startDate, endDate, startTime, endTime } = bounds;
 
   // Open the time conductor popup
@@ -555,7 +645,10 @@ async function setTimeConductorBounds(page, { submitChanges = true, ...bounds })
  * @param {string} start - The start date in 'YYYY-MM-DD HH:mm:ss.SSSZ' format
  * @param {string} end - The end date in 'YYYY-MM-DD HH:mm:ss.SSSZ' format
  */
-async function setFixedIndependentTimeConductorBounds(page, { start, end }) {
+async function setFixedIndependentTimeConductorBounds(
+  page: Page,
+  { start, end }: { start: string; end: string }
+) {
   // Activate Independent Time Conductor
   await page.getByLabel('Enable Independent Time Conductor').click();
 
@@ -574,7 +667,7 @@ async function setFixedIndependentTimeConductorBounds(page, { start, end }) {
  * @param {string} start - The start date in 'YYYY-MM-DD HH:mm:ss.SSSZ' format
  * @param {string} end - The end date in 'YYYY-MM-DD HH:mm:ss.SSSZ' format
  */
-async function _setTimeBounds(page, startDate, endDate) {
+async function _setTimeBounds(page: Page, startDate: string, endDate: string) {
   if (startDate) {
     // Fill start time
     await page
@@ -606,7 +699,7 @@ async function _setTimeBounds(page, startDate, endDate) {
  * @param {import('@playwright/test').Page} page
  * @param {number} [timeout] Provide a custom timeout in milliseconds to override the default timeout
  */
-async function waitForPlotsToRender(page, { timeout } = {}) {
+async function waitForPlotsToRender(page: Page, { timeout }: { timeout?: number } = {}) {
   //eslint-disable-next-line playwright/no-raw-locators
   const plotLocator = page.locator('.gl-plot');
   for (const plot of await plotLocator.all()) {
@@ -630,25 +723,25 @@ async function waitForPlotsToRender(page, { timeout } = {}) {
  * @param {string} canvasSelector The selector for the canvas element
  * @return {Promise<PlotPixel[]>}
  */
-async function getCanvasPixels(page, canvasSelector) {
+async function getCanvasPixels(page: Page, canvasSelector: string) {
   const canvasHandle = await page.evaluateHandle(
-    (canvas) => document.querySelector(canvas),
+    (selector: string) => document.querySelector(selector),
     canvasSelector
   );
   const canvasContextHandle = await page.evaluateHandle(
-    (canvas) => canvas.getContext('2d'),
+    (canvas: any) => canvas.getContext('2d'),
     canvasHandle
   );
 
   await waitForPlotsToRender(page);
   return page.evaluate(
-    ([canvas, ctx]) => {
+    ([canvas, ctx]: [any, any]) => {
       // The document canvas is where the plot points and lines are drawn.
       // The only way to access the canvas is using document (using page.evaluate)
       /** @type {ImageData} */
       const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
       /** @type {number[]} */
-      const imageDataValues = Object.values(data);
+      const imageDataValues: number[] = Object.values(data);
       /** @type {PlotPixel[]} */
       const plotPixels = [];
       // Each pixel consists of four values within the ImageData.data array. The for loop iterates by multiples of four.
@@ -671,7 +764,7 @@ async function getCanvasPixels(page, canvasSelector) {
 
       return plotPixels;
     },
-    [canvasHandle, canvasContextHandle]
+    [canvasHandle, canvasContextHandle] as any
   );
 }
 
@@ -681,7 +774,7 @@ async function getCanvasPixels(page, canvasSelector) {
  * @param {string} parameterName
  * @param {string} objectName
  */
-async function linkParameterToObject(page, parameterName, objectName) {
+async function linkParameterToObject(page: Page, parameterName: string, objectName: string) {
   await page.getByRole('searchbox', { name: 'Search Input' }).click();
   await page.getByRole('searchbox', { name: 'Search Input' }).fill(parameterName);
   await page.getByLabel('Object Results').getByText(parameterName).click();
@@ -699,7 +792,7 @@ async function linkParameterToObject(page, parameterName, objectName) {
  * @param {import('@playwright/test').Page} page
  * @param {string} newName
  */
-async function renameCurrentObjectFromBrowseBar(page, newName) {
+async function renameCurrentObjectFromBrowseBar(page: Page, newName: string) {
   const nameInput = page.getByLabel('Browse bar object name');
   await nameInput.click();
   await nameInput.fill('');
@@ -717,7 +810,11 @@ async function renameCurrentObjectFromBrowseBar(page, newName) {
  * @param {string} objectIdentifier identifier for object
  * @returns {Promise<string>} the formatted sin telemetry value
  */
-async function getNextSineValueFromSWG(page, objectIdentifier, returnOnlyValue = true) {
+async function getNextSineValueFromSWG(
+  page: Page,
+  objectIdentifier: string,
+  returnOnlyValue: boolean = true
+) {
   // Generate a unique function name for this subscription
   const uniqueFunctionName = `getTelemValue_${genUuid().replace(/-/g, '_')}`;
 
@@ -730,11 +827,11 @@ async function getNextSineValueFromSWG(page, objectIdentifier, returnOnlyValue =
       const telemetryObject = await window.openmct.objects.get(telemetryIdentifier);
       const metadata = window.openmct.telemetry.getMetadata(telemetryObject);
       const formats = await window.openmct.telemetry.getFormatMap(metadata);
-      window.openmct.telemetry.subscribe(telemetryObject, (obj) => {
+      window.openmct.telemetry.subscribe(telemetryObject, (obj: any) => {
         const sinVal = obj.sin;
         const formattedSinVal = formats.sin.format(sinVal);
         const formattedTimestamp = formats.utc.format(obj.utc);
-        window[functionName](onlyValue ? formattedSinVal : { ...obj, formattedTimestamp });
+        (window as any)[functionName](onlyValue ? formattedSinVal : { ...obj, formattedTimestamp });
       });
     },
     {
