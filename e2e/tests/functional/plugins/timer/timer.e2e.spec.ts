@@ -20,6 +20,7 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
+import type { Page } from '@playwright/test';
 import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../../../appActions.ts';
 import { MISSION_TIME } from '../../../../constants.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
@@ -131,7 +132,7 @@ test.describe('Timer with target date @clock', () => {
  * @param {import('@playwright/test').Page} page
  * @param {TimerAction} action
  */
-async function triggerTimerContextMenuAction(page, timerUrl, action) {
+async function triggerTimerContextMenuAction(page: Page, timerUrl: string, action: string) {
   const menuAction = `.c-menu ul li >> text="${action}"`;
   await openObjectTreeContextMenu(page, timerUrl);
   await page.locator(menuAction).click();
@@ -143,7 +144,7 @@ async function triggerTimerContextMenuAction(page, timerUrl, action) {
  * @param {import('@playwright/test').Page} page
  * @param {TimerAction} action
  */
-async function triggerTimer3dotMenuAction(page, action) {
+async function triggerTimer3dotMenuAction(page: Page, action: string) {
   const menuAction = `.c-menu ul li >> text="${action}"`;
   let isActionAvailable = false;
   let iterations = 0;
@@ -165,7 +166,7 @@ async function triggerTimer3dotMenuAction(page, action) {
  * @param {import('@playwright/test').Page} page
  * @param {TimerViewAction} action
  */
-async function triggerTimerViewAction(page, action) {
+async function triggerTimerViewAction(page: Page, action: string) {
   await page.locator('.c-timer').hover({ trial: true });
   const buttonTitle = buttonTitleFromAction(action);
   await page.getByLabel(buttonTitle, { exact: true }).click();
@@ -176,7 +177,7 @@ async function triggerTimerViewAction(page, action) {
  * Takes in a TimerViewAction and returns the button title
  * @param {TimerViewAction} action
  */
-function buttonTitleFromAction(action) {
+function buttonTitleFromAction(action: string): string {
   switch (action) {
     case 'Start':
       return 'Start';
@@ -184,6 +185,8 @@ function buttonTitleFromAction(action) {
       return 'Pause';
     case 'Restart at 0':
       return 'Reset';
+    default:
+      return action;
   }
 }
 
@@ -192,9 +195,9 @@ function buttonTitleFromAction(action) {
  * @param {import('@playwright/test').Page} page
  * @param {TimerAction} action
  */
-async function assertTimerStateAfterAction(page, action) {
+async function assertTimerStateAfterAction(page: Page, action: string) {
   const timerValue = page.locator('.c-timer__value');
-  let timerStateClass;
+  let timerStateClass = '';
   switch (action) {
     case 'Start':
     case 'Restart at 0':
@@ -220,7 +223,7 @@ async function assertTimerStateAfterAction(page, action) {
  * @param {import('@playwright/test').Page} page
  * @param {string} url the url to the object
  */
-async function openObjectTreeContextMenu(page, url) {
+async function openObjectTreeContextMenu(page: Page, url: string) {
   await page.goto(url);
   await page.getByLabel('Show selected item in tree').click();
   await page.locator('.is-navigated-object').click({

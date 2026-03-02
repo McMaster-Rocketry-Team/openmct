@@ -23,6 +23,7 @@
 This test suite is dedicated to tests which verify the basic operations surrounding conditionSets and styling
 */
 
+import type { Locator } from '@playwright/test';
 import {
   createDomainObjectWithDefaults,
   linkParameterToObject,
@@ -139,7 +140,7 @@ test.describe('Conditionally Styling, using a Condition Set', () => {
     await waitForStyleChange(styledElement, redBG);
 
     // Fast forward to the next state change
-    await page.clock.fastForward(STATE_CHANGE_INTERVAL * 1000);
+    await page.clock.fastForward(Number(STATE_CHANGE_INTERVAL) * 1000);
 
     // Check if the style is not red when text is 'ON'
     await expect(textElement).toHaveText('ON');
@@ -153,7 +154,7 @@ test.describe('Conditionally Styling, using a Condition Set', () => {
  * @param {string} expectedStyle - The expected style to wait for.
  * @param {number} timeout - The timeout in milliseconds.
  */
-async function waitForStyleChange(element, expectedStyle, timeout = 0) {
+async function waitForStyleChange(element: Locator, expectedStyle: string, timeout = 0) {
   await expect(async () => {
     const style = await element.getAttribute('style');
 

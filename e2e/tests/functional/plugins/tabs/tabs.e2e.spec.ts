@@ -110,7 +110,7 @@ test.describe('Tabs View', () => {
     await page.goto(tabsView.url);
     // check that the initial tab is displayed
     const lockedSelectedTab = page.getByLabel(/- selected/);
-    await expect(lockedSelectedTab).toHaveText(await initialTab.textContent());
+    await expect(lockedSelectedTab).toHaveText((await initialTab.textContent())!);
 
     //unlock the view
     await page.getByLabel('Locked for editing. Click to unlock.', { exact: true }).click();

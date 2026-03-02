@@ -112,9 +112,9 @@ test.describe('Stacked Plot styling', () => {
 
     //Check styles of stacked plot
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page.getByLabel('Stacked Plot Style Target')
     );
 
@@ -135,9 +135,9 @@ test.describe('Stacked Plot styling', () => {
 
     //Verify styles are correct after reload
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page.getByLabel('Stacked Plot Style Target')
     );
 
@@ -152,14 +152,14 @@ test.describe('Stacked Plot styling', () => {
     await checkStyles(
       NO_STYLE_RGBA,
       NO_STYLE_RGBA,
-      hexToRGB(setTextColor),
+      hexToRGB(setTextColor)!,
       page.getByLabel('Stacked Plot Item Overlay Plot 1')
     );
 
     await checkStyles(
       NO_STYLE_RGBA,
       NO_STYLE_RGBA,
-      hexToRGB(setTextColor),
+      hexToRGB(setTextColor)!,
       page.getByLabel('Stacked Plot Item Overlay Plot 2')
     );
 
@@ -188,14 +188,14 @@ test.describe('Stacked Plot styling', () => {
     await checkStyles(
       NO_STYLE_RGBA,
       NO_STYLE_RGBA,
-      hexToRGB(defaultTextColor),
+      hexToRGB(defaultTextColor)!,
       page.getByLabel('Stacked Plot Item Overlay Plot 1')
     );
 
     await checkStyles(
       NO_STYLE_RGBA,
       NO_STYLE_RGBA,
-      hexToRGB(defaultTextColor),
+      hexToRGB(defaultTextColor)!,
       page.getByLabel('Stacked Plot Item Overlay Plot 2')
     );
 
@@ -224,17 +224,17 @@ test.describe('Stacked Plot styling', () => {
 
     // Check styles on StackedPlot1
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page.getByLabel('Plot Container Style Target').first()
     );
 
     // Check styles on StackedPlot2
     await checkStyles(
-      hexToRGB(DEFAULT_PLOT_VIEW_BORDER_COLOR),
+      hexToRGB(DEFAULT_PLOT_VIEW_BORDER_COLOR)!,
       NO_STYLE_RGBA,
-      hexToRGB(defaultTextColor),
+      hexToRGB(defaultTextColor)!,
       page.getByLabel('Plot Container Style Target').nth(1)
     );
 
@@ -243,17 +243,17 @@ test.describe('Stacked Plot styling', () => {
 
     // Check styles on StackedPlot1
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page.getByLabel('Plot Container Style Target').first()
     );
 
     // Check styles on StackedPlot2
     await checkStyles(
-      hexToRGB(DEFAULT_PLOT_VIEW_BORDER_COLOR),
+      hexToRGB(DEFAULT_PLOT_VIEW_BORDER_COLOR)!,
       NO_STYLE_RGBA,
-      hexToRGB(defaultTextColor),
+      hexToRGB(defaultTextColor)!,
       page.getByLabel('Plot Container Style Target').nth(1)
     );
   });

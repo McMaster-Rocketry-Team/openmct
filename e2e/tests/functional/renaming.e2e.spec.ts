@@ -24,6 +24,7 @@
 This test suite is dedicated to tests for renaming objects, and their global application effects.
 */
 
+import type { Page } from '@playwright/test';
 import { createDomainObjectWithDefaults } from '../../appActions.ts';
 import { expect, test } from '../../baseFixtures.ts';
 
@@ -80,7 +81,7 @@ test.describe('Renaming objects', () => {
  * @param {string} url
  * @param {string} newName
  */
-async function renameObjectFromContextMenu(page, url, newName) {
+async function renameObjectFromContextMenu(page: Page, url: string, newName: string) {
   await openObjectTreeContextMenu(page, url);
   await page.locator('li:text("Edit Properties")').click();
   const nameInput = page.getByLabel('Title', { exact: true });
@@ -96,7 +97,7 @@ async function renameObjectFromContextMenu(page, url, newName) {
  * @param {import('@playwright/test').Page} page
  * @param {string} url the url to the object
  */
-async function openObjectTreeContextMenu(page, url) {
+async function openObjectTreeContextMenu(page: Page, url: string) {
   await page.goto(url);
   await page.getByLabel('Show selected item in tree').click();
   await page.locator('.is-navigated-object').click({

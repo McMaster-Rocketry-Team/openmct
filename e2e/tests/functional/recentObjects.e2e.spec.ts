@@ -265,15 +265,15 @@ test.describe('Recent Objects', () => {
     // Collapse the tree
     await page.getByTitle('Collapse all tree items').click();
     const lastFolderTreeItem = page.getByRole('tree', { name: 'Main Tree' }).getByRole('treeitem', {
-      name: lastFolder.name,
+      name: lastFolder!.name,
       expanded: true
     });
     const lastClockTreeItem = page.getByRole('tree', { name: 'Main Tree' }).getByRole('treeitem', {
-      name: lastClock.name
+      name: lastClock!.name
     });
 
     // Test "Open and Scroll To" in a deeply nested tree, while we're here
-    await page.getByRole('button', { name: `Open and scroll to ${lastClock.name}` }).click();
+    await page.getByRole('button', { name: `Open and scroll to ${lastClock!.name}` }).click();
 
     // Assert that the Clock parent folder has expanded and the Clock is visible)
     await expect(lastFolderTreeItem.locator('.c-disclosure-triangle')).toHaveClass(/--expanded/);
