@@ -24,7 +24,7 @@
  * This test is dedicated to test styling of flex layouts
  */
 
-import { createDomainObjectWithDefaults } from '../../../../appActions.ts';
+import { createDomainObjectWithDefaults, type CreatedObjectInfo } from '../../../../appActions.ts';
 import { checkStyles, hexToRGB, setStyles } from '../../../../helper/stylingUtils.ts';
 import { test } from '../../../../pluginFixtures.ts';
 
@@ -39,8 +39,8 @@ const pukeGreen = '#6aa84f'; //Ugliest green known to man 🤮
 const NO_STYLE_RGBA = 'rgba(0, 0, 0, 0)'; //default background color value
 
 test.describe('Flexible Layout styling', () => {
-  let stackedPlot;
-  let flexibleLayout;
+  let stackedPlot: CreatedObjectInfo;
+  let flexibleLayout: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
 
@@ -88,9 +88,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Flex Layout Column matches set styles
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page.getByLabel('Flexible Layout Column')
     );
 
@@ -103,17 +103,17 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles of overall Flex Layout
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page.getByLabel('Flexible Layout Column')
     );
 
     // Check styles on StackedPlot1. Note: https://github.com/nasa/openmct/issues/7337
     await checkStyles(
-      hexToRGB(defaultFrameBorderColor),
+      hexToRGB(defaultFrameBorderColor)!,
       NO_STYLE_RGBA,
-      hexToRGB(setTextColor),
+      hexToRGB(setTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot1 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -121,9 +121,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot2. Note: https://github.com/nasa/openmct/issues/7337
     await checkStyles(
-      hexToRGB(defaultFrameBorderColor),
+      hexToRGB(defaultFrameBorderColor)!,
       NO_STYLE_RGBA,
-      hexToRGB(setTextColor),
+      hexToRGB(setTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot2 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -144,9 +144,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot1
     await checkStyles(
-      hexToRGB(defaultBorderTargetColor),
+      hexToRGB(defaultBorderTargetColor)!,
       NO_STYLE_RGBA,
-      hexToRGB(defaultTextColor),
+      hexToRGB(defaultTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot1 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -154,9 +154,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot2
     await checkStyles(
-      hexToRGB(defaultBorderTargetColor),
+      hexToRGB(defaultBorderTargetColor)!,
       NO_STYLE_RGBA,
-      hexToRGB(defaultTextColor),
+      hexToRGB(defaultTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot2 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -173,9 +173,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot1
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot1 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -183,9 +183,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot2
     await checkStyles(
-      hexToRGB(defaultBorderTargetColor),
+      hexToRGB(defaultBorderTargetColor)!,
       NO_STYLE_RGBA,
-      hexToRGB(defaultTextColor),
+      hexToRGB(defaultTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot2 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -200,9 +200,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot1
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot1 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -210,9 +210,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot2
     await checkStyles(
-      hexToRGB(defaultBorderTargetColor),
+      hexToRGB(defaultBorderTargetColor)!,
       NO_STYLE_RGBA,
-      hexToRGB(defaultTextColor),
+      hexToRGB(defaultTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot2 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -254,9 +254,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot1 to match the set colors
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot1 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -264,9 +264,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot2 to verify they are the default
     await checkStyles(
-      hexToRGB(defaultBorderTargetColor),
+      hexToRGB(defaultBorderTargetColor)!,
       NO_STYLE_RGBA,
-      hexToRGB(defaultTextColor),
+      hexToRGB(defaultTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot2 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -283,9 +283,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot2
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot2 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -300,9 +300,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot1
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot1 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -310,9 +310,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot2
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot2 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -341,17 +341,17 @@ test.describe('Flexible Layout styling', () => {
 
     // Flex Layout Column matches set styles
     await checkStyles(
-      hexToRGB(pukeGreen),
-      hexToRGB(pukeGreen),
-      hexToRGB(pukeGreen),
+      hexToRGB(pukeGreen)!,
+      hexToRGB(pukeGreen)!,
+      hexToRGB(pukeGreen)!,
       page.getByLabel('Flexible Layout Column')
     );
 
     // Check styles on StackedPlot1 matches previously set colors
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot1 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -359,9 +359,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles on StackedPlot2 matches previous set colors
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot2 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -391,9 +391,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles using checkStyles function
     await checkStyles(
-      hexToRGB(setBorderColor),
-      hexToRGB(setBackgroundColor),
-      hexToRGB(setTextColor),
+      hexToRGB(setBorderColor)!,
+      hexToRGB(setBackgroundColor)!,
+      hexToRGB(setTextColor)!,
       page
         .getByRole('group', { name: 'StackedPlot1 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -423,9 +423,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles using checkStyles function
     await checkStyles(
-      hexToRGB(defaultBorderTargetColor),
+      hexToRGB(defaultBorderTargetColor)!,
       NO_STYLE_RGBA,
-      hexToRGB(inheritedColor),
+      hexToRGB(inheritedColor)!,
       page
         .getByRole('group', { name: 'StackedPlot1 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -439,9 +439,9 @@ test.describe('Flexible Layout styling', () => {
 
     // Check styles using checkStyles function
     await checkStyles(
-      hexToRGB(defaultBorderTargetColor),
+      hexToRGB(defaultBorderTargetColor)!,
       NO_STYLE_RGBA,
-      hexToRGB(inheritedColor),
+      hexToRGB(inheritedColor)!,
       page
         .getByRole('group', { name: 'StackedPlot1 Frame' })
         .getByLabel('Stacked Plot Style Target')
@@ -468,17 +468,17 @@ test.describe('Flexible Layout styling', () => {
     await page.getByLabel('Cancel Editing').click();
     await page.getByRole('button', { name: 'Ok', exact: true }).click();
     await checkStyles(
-      hexToRGB(defaultBorderTargetColor),
+      hexToRGB(defaultBorderTargetColor)!,
       NO_STYLE_RGBA,
-      hexToRGB(inheritedColor),
+      hexToRGB(inheritedColor)!,
       page.getByLabel('Flexible Layout Column')
     );
 
     await page.reload();
     await checkStyles(
-      hexToRGB(defaultBorderTargetColor),
+      hexToRGB(defaultBorderTargetColor)!,
       NO_STYLE_RGBA,
-      hexToRGB(inheritedColor),
+      hexToRGB(inheritedColor)!,
       page.getByLabel('Flexible Layout Column')
     );
   });

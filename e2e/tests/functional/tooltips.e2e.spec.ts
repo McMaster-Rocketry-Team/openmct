@@ -24,7 +24,7 @@
 This suite is dedicated to tests which verify that tooltips are displayed correctly.
 */
 
-import { createDomainObjectWithDefaults, expandEntireTree } from '../../appActions.ts';
+import { createDomainObjectWithDefaults, expandEntireTree, type CreatedObjectInfo } from '../../appActions.ts';
 import { MISSION_TIME } from '../../constants.ts';
 import { expect, test } from '../../pluginFixtures.ts';
 
@@ -32,9 +32,9 @@ test.describe('Verify tooltips', () => {
   let folder1;
   let folder2;
   let folder3;
-  let sineWaveObject1;
-  let sineWaveObject2;
-  let sineWaveObject3;
+  let sineWaveObject1: CreatedObjectInfo;
+  let sineWaveObject2: CreatedObjectInfo;
+  let sineWaveObject3: CreatedObjectInfo;
 
   const swg1Path = 'My Items / Folder Foo / SWG 1';
   const swg2Path = 'My Items / Folder Foo / Folder Bar / SWG 2';
@@ -145,17 +145,17 @@ test.describe('Verify tooltips', () => {
     await page.keyboard.down('Control');
     //Hover over first object
     await page.getByText('SWG 1 Hz').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path!);
     //Hover over another object to clear
     await page.getByRole('button', { name: 'create' }).hover();
     //Hover over second object
     await page.getByText('SWG 2 Hz').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject2.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject2.path!);
     //Hover over another object to clear
     await page.getByRole('button', { name: 'create' }).hover();
     //Hover over third object
     await page.getByText('SWG 3 Hz').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path!);
     //Release the Control Key
     await page.keyboard.up('Control');
 
@@ -166,17 +166,17 @@ test.describe('Verify tooltips', () => {
     await page.keyboard.down('Control');
 
     await page.getByLabel('Plot Legend Expanded').getByText('SWG 1').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path!);
     //Hover over another object to clear
     await page.getByRole('button', { name: 'create' }).hover();
     //Hover over second object
     await page.getByLabel('Plot Legend Expanded').getByText('SWG 2').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject2.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject2.path!);
     //Hover over another object to clear
     await page.getByRole('button', { name: 'create' }).hover();
     //Hover over third object
     await page.getByLabel('Plot Legend Expanded').getByText('SWG 3').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path!);
   });
 
   test('display correct paths when hovering over object labels', async ({ page }) => {
@@ -186,7 +186,7 @@ test.describe('Verify tooltips', () => {
     //Expect tooltip to be the path of SWG 1
     await page.keyboard.down('Control');
     await page.getByRole('main').getByText('SWG 1', { exact: true }).hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path!);
     await page.keyboard.up('Control');
 
     //Navigate to SWG 3 in Tree
@@ -194,7 +194,7 @@ test.describe('Verify tooltips', () => {
     //Expect tooltip to be the path of SWG 3
     await page.keyboard.down('Control');
     await page.getByRole('main').getByText('SWG 3', { exact: true }).hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path!);
   });
 
   test('display correct paths when hovering over display layout pane headers', async ({ page }) => {
@@ -268,7 +268,7 @@ test.describe('Verify tooltips', () => {
 
     await page.keyboard.down('Control');
     await page.getByLabel('Plot Legend Item for Test').getByText('SWG').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path!);
 
     //Hover over Stacked Plot Title
     await page.getByTitle('Test Stacked Plot').hover();
@@ -276,7 +276,7 @@ test.describe('Verify tooltips', () => {
 
     //Hover over SWG3 Object
     await page.getByLabel('Alpha-numeric telemetry name for SWG').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path!);
   });
 
   test('display correct paths when hovering over flexible object labels', async ({ page }) => {
@@ -298,11 +298,11 @@ test.describe('Verify tooltips', () => {
     //Hover over SWG1 Object
     await page.keyboard.down('Control');
     await page.getByTitle('SWG 1').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path!);
 
     //Hover over SWG3 Object
     await page.getByTitle('SWG 3').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path!);
   });
 
   test('display correct paths when hovering over tab view labels', async ({ page }) => {
@@ -323,19 +323,19 @@ test.describe('Verify tooltips', () => {
     await page.keyboard.down('Control');
     await page.getByLabel('SWG 1 tab').getByText('SWG').hover();
 
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path!);
 
     await page.getByLabel('SWG 3 tab').getByText('SWG').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path!);
   });
 
   test('display correct paths when hovering tree items', async ({ page }) => {
     await page.keyboard.down('Control');
     await page.getByText('SWG 1').first().hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path!);
 
     await page.getByText('SWG 3').first().hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path!);
   });
 
   test('display correct paths when hovering search items', async ({ page }) => {
@@ -344,7 +344,7 @@ test.describe('Verify tooltips', () => {
 
     await page.keyboard.down('Control');
     await page.getByLabel('Object Results').getByText('SWG').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path!);
   });
 
   test('display path for source telemetry when hovering over gauge', async ({ page }) => {
@@ -359,7 +359,7 @@ test.describe('Verify tooltips', () => {
     // element blocks
     // eslint-disable-next-line playwright/no-force-option
     await page.getByRole('meter').hover({ position: { x: 0, y: 0 }, force: true });
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path!);
   });
 
   test('display tooltip path for notebook embeds', async ({ page }) => {
@@ -373,7 +373,7 @@ test.describe('Verify tooltips', () => {
       .dragTo(page.getByLabel('To start a new entry, click'));
     await page.keyboard.down('Control');
     await page.getByLabel('SWG 3 Notebook Embed').hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path!);
   });
 
   test('display tooltip path for telemetry table names @clock', async ({ page }) => {
@@ -427,13 +427,13 @@ test.describe('Verify tooltips', () => {
 
     await page.keyboard.down('Control');
     await page.getByLabel('Recent Objects').getByText(sineWaveObject3.name).hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path!);
 
     await page.getByLabel('Recent Objects').getByText(sineWaveObject2.name).hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject2.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject2.path!);
 
     await page.getByLabel('Recent Objects').getByText(sineWaveObject1.name).hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path!);
   });
 
   test('display tooltip path for time strips', async ({ page }) => {
@@ -459,12 +459,12 @@ test.describe('Verify tooltips', () => {
 
     await page.keyboard.down('Control');
     await page.getByText(sineWaveObject1.name).nth(2).hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject1.path!);
 
     await page.getByText(sineWaveObject2.name).nth(2).hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject2.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject2.path!);
 
     await page.getByText(sineWaveObject3.name).nth(2).hover();
-    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path);
+    await expect(page.getByRole('tooltip')).toHaveText(sineWaveObject3.path!);
   });
 });

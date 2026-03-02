@@ -21,6 +21,8 @@
  *****************************************************************************/
 import { fileURLToPath } from 'url';
 
+import type { Page } from '@playwright/test';
+
 import {
   createDomainObjectWithDefaults,
   getNextSineValueFromSWG,
@@ -28,7 +30,8 @@ import {
   setFixedIndependentTimeConductorBounds,
   setFixedTimeMode,
   setRealTimeMode,
-  setStartOffset
+  setStartOffset,
+  type CreatedObjectInfo
 } from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
@@ -205,7 +208,7 @@ test.describe('Display Layout Toolbar Actions @localStorage', () => {
 
 test.describe('Display Layout', () => {
   /** @type {import('../../../../appActions').CreatedObjectInfo} */
-  let sineWaveObject;
+  let sineWaveObject: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
     await setRealTimeMode(page);
@@ -244,10 +247,10 @@ test.describe('Display Layout', () => {
     // On getting data, check if the value found in the  Display Layout is the most recent value
     // from the Sine Wave Generator
     const getTelemValuePromise = getNextSineValueFromSWG(page, sineWaveObject.uuid);
-    const formattedTelemetryValue = await getTelemValuePromise;
+    const formattedTelemetryValue = (await getTelemValuePromise) as string;
     await expect(page.getByText(formattedTelemetryValue)).toBeVisible();
     const displayLayoutValue = await page.getByText(formattedTelemetryValue).textContent();
-    const trimmedDisplayValue = displayLayoutValue.trim();
+    const trimmedDisplayValue = displayLayoutValue!.trim();
 
     expect(trimmedDisplayValue).toBe(formattedTelemetryValue);
 
@@ -290,10 +293,10 @@ test.describe('Display Layout', () => {
 
     // On getting data, check if the value found in the Display Layout is the most recent value
     // from the Sine Wave Generator
-    const formattedTelemetryValue = await getTelemValuePromise;
+    const formattedTelemetryValue = (await getTelemValuePromise) as string;
     await expect(page.getByText(formattedTelemetryValue)).toBeVisible();
     const displayLayoutValue = await page.getByText(formattedTelemetryValue).textContent();
-    const trimmedDisplayValue = displayLayoutValue.trim();
+    const trimmedDisplayValue = displayLayoutValue!.trim();
 
     expect(trimmedDisplayValue).toBe(formattedTelemetryValue);
   });
@@ -478,7 +481,7 @@ test.describe('Display Layout', () => {
     await page.getByRole('listitem', { name: 'Save and Finish Editing' }).click();
 
     // Time to inspect some network traffic
-    let networkRequests = [];
+    let networkRequests: unknown[] = [];
     page.on('request', (request) => {
       const searchRequest =
         request.url().endsWith('_find') || request.url().includes('by_keystring');
@@ -605,7 +608,7 @@ test.describe('Display Layout', () => {
     const CHECK_INTERVAL = 100; // Check every 100ms
 
     // Create a promise that will check for filtered values periodically
-    const checkForCorrectValues = new Promise((resolve, reject) => {
+    const checkForCorrectValues = new Promise<void>((resolve, reject) => {
       const interval = setInterval(async () => {
         const offCount = await tableFilterOn.locator('td[title="OFF"]').count();
         const onCount = await tableFilterOff.locator('td[title="ON"]').count();
@@ -630,7 +633,7 @@ test.describe('Display Layout', () => {
   });
 });
 
-async function selectFilterOption(page, filterOption) {
+async function selectFilterOption(page: Page, filterOption: string) {
   await page.getByRole('tab', { name: 'Filters' }).click();
   await page
     .getByLabel('Inspector Views')
@@ -642,7 +645,7 @@ async function selectFilterOption(page, filterOption) {
   await page.selectOption('select[name="setSelectionThreshold"]', filterOption);
 }
 
-async function addAndRemoveDrawingObjectAndAssert(page, layoutObject, DISPLAY_LAYOUT_NAME) {
+async function addAndRemoveDrawingObjectAndAssert(page: Page, layoutObject: string, DISPLAY_LAYOUT_NAME: string) {
   await expect(page.getByLabel(layoutObject, { exact: true })).toHaveCount(0);
   await addLayoutObject(page, DISPLAY_LAYOUT_NAME, layoutObject);
   expect(
@@ -661,7 +664,7 @@ async function addAndRemoveDrawingObjectAndAssert(page, layoutObject, DISPLAY_LA
  * @param {import('@playwright/test').Page} page
  * @param {'Box' | 'Ellipse' | 'Line' | 'Text' | 'Image'} layoutObject
  */
-async function removeLayoutObject(page, layoutObject) {
+async function removeLayoutObject(page: Page, layoutObject: string) {
   await page
     .getByLabel(`Move ${layoutObject} Frame`, { exact: true })
     .or(page.getByLabel(layoutObject, { exact: true }))
@@ -678,7 +681,7 @@ async function removeLayoutObject(page, layoutObject) {
  * @param {string} layoutName
  * @param {'Box' | 'Ellipse' | 'Line' | 'Text' | 'Image'} layoutObject
  */
-async function addLayoutObject(page, layoutName, layoutObject) {
+async function addLayoutObject(page: Page, layoutName: string, layoutObject: string) {
   await page.getByLabel(`${layoutName} Layout`, { exact: true }).click();
   await page.getByText('Add Drawing Object').click();
   await page
