@@ -20,8 +20,19 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
+import type { Page } from '@playwright/test';
+
 import { createDomainObjectWithDefaults, createPlanFromJSON } from '../appActions.ts';
+import type { CreatedObjectInfo } from '../appActions.ts';
 import { expect } from '../pluginFixtures.ts';
+
+interface PlanActivity {
+  start: number;
+  end: number;
+  [key: string]: unknown;
+}
+
+type PlanJson = Record<string, PlanActivity[]>;
 
 /**
  * Asserts that the number of activities in the plan view matches the number of
@@ -32,7 +43,7 @@ import { expect } from '../pluginFixtures.ts';
  * @param {Object} plan The raw plan json to assert against
  * @param {string} planObjectUrl The URL of the object to assert against (plan or gantt chart)
  */
-export async function assertPlanActivities(page, plan, planObjectUrl) {
+export async function assertPlanActivities(page: Page, plan: PlanJson, planObjectUrl: string) {
   const groups = Object.keys(plan);
   for (const group of groups) {
     for (let i = 0; i < plan[group].length; i++) {
@@ -72,7 +83,7 @@ export async function assertPlanActivities(page, plan, planObjectUrl) {
  * @param {number} end2 the end time of the second activity
  * @returns {boolean} true if the activities overlap, false otherwise
  */
-function activitiesWithinTimeBounds(start1, end1, start2, end2) {
+function activitiesWithinTimeBounds(start1: number, end1: number, start2: number, end2: number) {
   return (
     (start1 >= start2 && start1 <= end2) ||
     (end1 >= start2 && end1 <= end2) ||
@@ -88,7 +99,7 @@ function activitiesWithinTimeBounds(start1, end1, start2, end2) {
  * @param {Object} plan The raw plan json to assert against
  * @param {string} objectUrl The URL of the object to assert against (plan or gantt chart)
  */
-export async function assertPlanOrderedSwimLanes(page, plan, objectUrl) {
+export async function assertPlanOrderedSwimLanes(page: Page, plan: { Groups: { name: string }[] }, objectUrl: string) {
   // Switch to the plan view
   await page.goto(`${objectUrl}?view=plan.view`);
   const planGroups = await page
@@ -112,7 +123,7 @@ export async function assertPlanOrderedSwimLanes(page, plan, objectUrl) {
  * @param {Object} planJson
  * @param {string} planObjectUrl
  */
-export async function setBoundsToSpanAllActivities(page, planJson, planObjectUrl) {
+export async function setBoundsToSpanAllActivities(page: Page, planJson: PlanJson, planObjectUrl: string) {
   // Get the earliest start value
   const start = getEarliestStartTime(planJson);
   // Get the latest end value
@@ -127,7 +138,7 @@ export async function setBoundsToSpanAllActivities(page, planJson, planObjectUrl
  * @param {Object} planJson
  * @returns {number}
  */
-export function getEarliestStartTime(planJson) {
+export function getEarliestStartTime(planJson: PlanJson) {
   const activities = Object.values(planJson).flat();
 
   return Math.min(...activities.map((activity) => activity.start));
@@ -138,7 +149,7 @@ export function getEarliestStartTime(planJson) {
  * @param {Object} planJson
  * @returns {number}
  */
-export function getLatestEndTime(planJson) {
+export function getLatestEndTime(planJson: PlanJson) {
   const activities = Object.values(planJson).flat();
 
   return Math.max(...activities.map((activity) => activity.end));
@@ -149,7 +160,7 @@ export function getLatestEndTime(planJson) {
  * @param {object} planJson
  * @returns {object}
  */
-export function getFirstActivity(planJson) {
+export function getFirstActivity(planJson: PlanJson) {
   const groups = Object.keys(planJson);
   const firstGroupKey = groups[0];
   const firstGroupItems = planJson[firstGroupKey];
@@ -162,13 +173,14 @@ export function getFirstActivity(planJson) {
  * @param {import('@playwright/test').Page} page
  * @param {import('../../appActions').CreatedObjectInfo} plan
  */
-export async function setDraftStatusForPlan(page, plan) {
+export async function setDraftStatusForPlan(page: Page, plan: CreatedObjectInfo) {
   await page.evaluate(async (planObject) => {
-    await window.openmct.status.set(planObject.uuid, 'draft');
+    const identifier = window.openmct.objects.parseKeyString(planObject.uuid);
+    await window.openmct.status.set(identifier, 'draft');
   }, plan);
 }
 
-export async function addPlanGetInterceptor(page) {
+export async function addPlanGetInterceptor(page: Page) {
   await page.waitForLoadState('load');
   await page.evaluate(async () => {
     await window.openmct.objects.addGetInterceptor({
@@ -192,7 +204,7 @@ export async function addPlanGetInterceptor(page) {
  * Create a Plan from JSON and add it to a Timelist and Navigate to the Plan view
  * @param {import('@playwright/test').Page} page
  */
-export async function createTimelistWithPlanAndSetActivityInProgress(page, planJson) {
+export async function createTimelistWithPlanAndSetActivityInProgress(page: Page, planJson: PlanJson) {
   await page.goto('./', { waitUntil: 'domcontentloaded' });
 
   const timelist = await createDomainObjectWithDefaults(page, {
