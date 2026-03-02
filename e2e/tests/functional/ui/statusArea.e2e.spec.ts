@@ -41,7 +41,7 @@ test.describe('Status Area', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('./', { waitUntil: 'domcontentloaded' });
 
-    const viewportSize = page.viewportSize();
+    const viewportSize = page.viewportSize()!;
     viewportHeight = viewportSize.height;
     viewportWidth = viewportSize.width;
     expandButton = page.getByLabel('Show icon and name');
@@ -49,13 +49,13 @@ test.describe('Status Area', () => {
     singleLineButton = page.getByLabel('Display as single line');
     multiLineButton = page.getByLabel('Display as multiple lines');
     indicatorsContainer = page.getByLabel('Status Indicators');
-    const indicatorsContainerBoundingBox = await indicatorsContainer.boundingBox();
+    const indicatorsContainerBoundingBox = (await indicatorsContainer.boundingBox())!;
     indicatorsContainerLeftPosition = indicatorsContainerBoundingBox.x;
     indicatorsContainerWidth = indicatorsContainerBoundingBox.width;
     indicatorsContainerHeight = indicatorsContainerBoundingBox.height;
     indicatorsContainerRightPosition = indicatorsContainerLeftPosition + indicatorsContainerWidth;
     firstIndicator = indicatorsContainer.getByRole('status').first();
-    firstIndicatorPosition = (await firstIndicator.boundingBox()).x;
+    firstIndicatorPosition = (await firstIndicator.boundingBox())!.x;
     indicatorsWidth = indicatorsContainerRightPosition - firstIndicatorPosition;
   });
 
@@ -73,7 +73,7 @@ test.describe('Status Area', () => {
       });
 
       await test.step('verify indicators restricted to one line even with overflow', async () => {
-        const indicatorsContainerHeightAfterResize = (await indicatorsContainer.boundingBox())
+        const indicatorsContainerHeightAfterResize = (await indicatorsContainer.boundingBox())!
           .height;
         expect(indicatorsContainerHeightAfterResize).toBe(indicatorsContainerHeight);
       });
@@ -114,7 +114,7 @@ test.describe('Status Area', () => {
       });
 
       await test.step('verify indicators wrap to multiple lines', async () => {
-        const indicatorsContainerHeightAfterResize = (await indicatorsContainer.boundingBox())
+        const indicatorsContainerHeightAfterResize = (await indicatorsContainer.boundingBox())!
           .height;
         expect(indicatorsContainerHeightAfterResize).toBeGreaterThan(indicatorsContainerHeight);
       });
@@ -122,7 +122,7 @@ test.describe('Status Area', () => {
   });
 
   test('allows for collapsed or expanded indicators mode', async ({ page }) => {
-    const initialExpandedPosition = (await firstIndicator.boundingBox()).x;
+    const initialExpandedPosition = (await firstIndicator.boundingBox())!.x;
 
     await test.step('verify button indicates action to collapse', async () => {
       await expect(collapseButton).toBeVisible();
@@ -133,7 +133,7 @@ test.describe('Status Area', () => {
       await collapseButton.click();
     });
 
-    const collapsedPosition = (await firstIndicator.boundingBox()).x;
+    const collapsedPosition = (await firstIndicator.boundingBox())!.x;
 
     await test.step('verify indicators in collapsed mode', async () => {
       await expect(initialExpandedPosition).toBeLessThan(collapsedPosition);
@@ -150,7 +150,7 @@ test.describe('Status Area', () => {
       await expandButton.click();
     });
 
-    const finalExpandedPosition = (await firstIndicator.boundingBox()).x;
+    const finalExpandedPosition = (await firstIndicator.boundingBox())!.x;
 
     await test.step('verify indicators in expanded mode', async () => {
       await expect(finalExpandedPosition).toBeLessThan(collapsedPosition);
@@ -175,7 +175,7 @@ test.describe('Status Area', () => {
     });
 
     await test.step('resize viewport so that indicators just do not overflow in collapsed mode', async () => {
-      const delta = (await firstIndicator.boundingBox()).x - firstIndicatorPosition;
+      const delta = (await firstIndicator.boundingBox())!.x - firstIndicatorPosition;
       console.log(delta);
       await page.setViewportSize({
         width: Math.round(viewportWidth - indicatorsContainerWidth + indicatorsWidth - delta / 2),
@@ -184,7 +184,7 @@ test.describe('Status Area', () => {
     });
 
     await test.step('verify indicators are on a single line', async () => {
-      const indicatorsContainerHeightAfterResize = (await indicatorsContainer.boundingBox()).height;
+      const indicatorsContainerHeightAfterResize = (await indicatorsContainer.boundingBox())!.height;
       expect(indicatorsContainerHeightAfterResize).toBe(indicatorsContainerHeight);
     });
 
@@ -193,7 +193,7 @@ test.describe('Status Area', () => {
     });
 
     await test.step('verify indicators wrap to multiple lines', async () => {
-      const indicatorsContainerHeightAfterResize = (await indicatorsContainer.boundingBox()).height;
+      const indicatorsContainerHeightAfterResize = (await indicatorsContainer.boundingBox())!.height;
       expect(indicatorsContainerHeightAfterResize).toBeGreaterThan(indicatorsContainerHeight);
     });
 
@@ -202,7 +202,7 @@ test.describe('Status Area', () => {
     });
 
     await test.step('verify indicators are on a single line', async () => {
-      const indicatorsContainerHeightAfterResize = (await indicatorsContainer.boundingBox()).height;
+      const indicatorsContainerHeightAfterResize = (await indicatorsContainer.boundingBox())!.height;
       expect(indicatorsContainerHeightAfterResize).toBe(indicatorsContainerHeight);
     });
 

@@ -20,6 +20,8 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
+import type { Page } from '@playwright/test';
+
 import { createDomainObjectWithDefaults } from '../../appActions.ts';
 import { expect, test } from '../../pluginFixtures.ts';
 
@@ -194,7 +196,7 @@ test.describe('Main Tree', () => {
 
     page.on('requestfailed', (request) => {
       // check if the request was aborted
-      if (request.failure().errorText === 'net::ERR_ABORTED') {
+      if (request.failure()!.errorText === 'net::ERR_ABORTED') {
         requestWasAborted = true;
       }
     });
@@ -266,13 +268,13 @@ test.describe('Main Tree', () => {
         const openmct = window.openmct;
 
         const testObjectProvider = {
-          get({ key }) {
+          get({ key }: { key: string }) {
             return Promise.resolve({
               identifier: {
                 namespace: 'test-namespace',
                 key
               },
-              ...testObjects[key]
+              ...testObjects[key as keyof typeof testObjects]
             });
           }
         };
@@ -332,7 +334,7 @@ test.describe('Main Tree', () => {
  * @param {import('@playwright/test').Page} page
  * @param {Array<string>} expected
  */
-async function getAndAssertTreeItems(page, expected) {
+async function getAndAssertTreeItems(page: Page, expected: string[]) {
   const treeItems = page.getByRole('treeitem');
   await expect(treeItems).toHaveCount(expected.length);
   await expect(treeItems).toHaveText(expected, { useInnerText: true });
@@ -344,7 +346,7 @@ async function getAndAssertTreeItems(page, expected) {
  * @param {string} url
  * @param {string} newName
  */
-async function renameObjectFromContextMenu(page, url, newName) {
+async function renameObjectFromContextMenu(page: Page, url: string, newName: string) {
   await openObjectTreeContextMenu(page, url);
   await page.getByLabel('Edit Properties...').click();
   const nameInput = page.getByLabel('Title', { exact: true });
@@ -359,7 +361,7 @@ async function renameObjectFromContextMenu(page, url, newName) {
  * @param {import('@playwright/test').Page} page
  * @param {string} url the url to the object
  */
-async function openObjectTreeContextMenu(page, url) {
+async function openObjectTreeContextMenu(page: Page, url: string) {
   await page.goto(url);
   await page.getByLabel('Show selected item in tree').click();
   await page.locator('.is-navigated-object').click({

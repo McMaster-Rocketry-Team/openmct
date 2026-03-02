@@ -167,7 +167,7 @@ test.describe('Inspector tests', () => {
     // using page.mouse.wheel to scroll the inspector content by the height of the content
     // because click and scrollIntoView will scroll even if scrollbar not available
     await inspectorPropertiesLocator.hover();
-    const offset = await inspectorPropertiesLocator.evaluate((el) => el.offsetHeight);
+    const offset = await inspectorPropertiesLocator.evaluate((el) => (el as HTMLElement).offsetHeight);
     await page.mouse.wheel(0, offset);
 
     await expect(lastInspectorPropertyValue).toBeInViewport();
@@ -176,7 +176,11 @@ test.describe('Inspector tests', () => {
   test(`Inspector tabs show the correct tabs per view and mode`, async ({ page }) => {
     // loop through each view type
     for (const view of Object.keys(viewsTabsMatrix)) {
-      const viewConfig = viewsTabsMatrix[view];
+      const viewConfig = viewsTabsMatrix[view as keyof typeof viewsTabsMatrix] as {
+        Browse: string[];
+        Edit?: string[];
+        required?: Record<string, string>;
+      };
       const createOptions = {
         type: view,
         name: view
@@ -195,8 +199,8 @@ test.describe('Inspector tests', () => {
 
       // verify correct order of tabs for browse mode
       for (const [index, value] of Object.entries(viewConfig.Browse)) {
-        const tab = page.getByRole('tab').nth(index);
-        await expect(tab).toHaveText(value);
+        const tab = page.getByRole('tab').nth(Number(index));
+        await expect(tab).toHaveText(value as string);
       }
 
       // enter Edit if necessary
@@ -208,8 +212,8 @@ test.describe('Inspector tests', () => {
 
         // verify correct order of tabs for edit mode
         for (const [index, value] of Object.entries(viewConfig.Edit)) {
-          const tab = page.getByRole('tab').nth(index);
-          await expect(tab).toHaveText(value);
+          const tab = page.getByRole('tab').nth(Number(index));
+          await expect(tab).toHaveText(value as string);
         }
 
         await page.getByLabel('Save').first().click();

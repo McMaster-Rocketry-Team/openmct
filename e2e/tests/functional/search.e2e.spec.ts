@@ -23,7 +23,7 @@
  * This test suite is dedicated to tests which verify search functionalities.
  */
 
-import type { Locator } from '@playwright/test';
+import type { Locator, Page, Request } from '@playwright/test';
 import { v4 as uuid } from 'uuid';
 
 import { createDomainObjectWithDefaults } from '../../appActions.ts';
@@ -207,7 +207,7 @@ test.describe('Grand Search', () => {
 
         if (isObjectNamesRequest && isHeadRequest) {
           const response = await request.response();
-          isObjectNamesViewAvailable = response.status() === 200;
+          isObjectNamesViewAvailable = response!.status() === 200;
         }
       });
 
@@ -247,7 +247,7 @@ test.describe('Grand Search', () => {
 
         if (isObjectNamesRequest && isHeadRequest) {
           const response = await request.response();
-          isObjectNamesViewAvailable = response.status() === 200;
+          isObjectNamesViewAvailable = response!.status() === 200;
         }
       });
 
@@ -282,7 +282,7 @@ test.describe('Grand Search', () => {
     });
     await createObjectsForSearch(page);
 
-    let networkRequests = [];
+    let networkRequests: Request[] = [];
 
     page.on('request', (request) => {
       const isSearchRequest =
@@ -318,7 +318,7 @@ test.describe('Grand Search', () => {
     await createObjectsForSearch(page);
     page.on('requestfailed', (request) => {
       // check if the request was aborted
-      if (request.failure().errorText === 'net::ERR_ABORTED') {
+      if (request.failure()!.errorText === 'net::ERR_ABORTED') {
         requestWasAborted = true;
       }
     });
@@ -383,7 +383,7 @@ test.describe('Grand Search', () => {
  *
  * @param {import('@playwright/test').Page} page
  */
-async function waitForSearchCompletion(page) {
+async function waitForSearchCompletion(page: Page) {
   // Wait loading spinner to disappear
   await expect(
     page
@@ -400,7 +400,7 @@ async function waitForSearchCompletion(page) {
  * Creates some domain objects for searching
  * @param {import('@playwright/test').Page} page
  */
-async function createObjectsForSearch(page) {
+async function createObjectsForSearch(page: Page) {
   const redFolder = await createDomainObjectWithDefaults(page, {
     type: 'Folder',
     name: 'Red Folder'
