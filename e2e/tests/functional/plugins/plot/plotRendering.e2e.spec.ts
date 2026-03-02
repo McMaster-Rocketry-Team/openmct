@@ -25,6 +25,7 @@
  *
  */
 
+import type { Page } from '@playwright/test';
 import {
   createDomainObjectWithDefaults,
   getCanvasPixels,
@@ -102,7 +103,7 @@ test.describe('Plot Rendering', () => {
  * @param {import('../../../../appActions').CreateObjectInfo} sineWaveGeneratorObject
  * @returns {Promise<CreatedObjectInfo>} An object containing information about the edited domain object.
  */
-async function editSineWaveToUseInfinityOption(page, sineWaveGeneratorObject) {
+async function editSineWaveToUseInfinityOption(page: Page, sineWaveGeneratorObject: { url: string }) {
   await page.goto(sineWaveGeneratorObject.url);
   // Edit SWG properties to include infinity values
   await page.locator('[title="More actions"]').click();

@@ -24,6 +24,7 @@
 Tests to verify log plot functionality when objects are missing
 */
 
+import type { Download } from '@playwright/test';
 import { createDomainObjectWithDefaults } from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 

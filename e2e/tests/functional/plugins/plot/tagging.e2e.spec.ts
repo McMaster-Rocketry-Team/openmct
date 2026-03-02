@@ -131,7 +131,7 @@ test.describe('Plot Tagging', () => {
         const isTagsRequest = request.url().endsWith('by_keystring');
         if (isTagsRequest) {
           const response = await request.response();
-          resolve(response.status() === 200);
+          resolve(response!.status() === 200);
         }
       });
     });

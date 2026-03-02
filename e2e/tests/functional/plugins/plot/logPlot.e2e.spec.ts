@@ -25,6 +25,7 @@ Tests to verify log plot functionality. Note this test suite if very much under 
 necessarily be used for reference when writing new tests in this area.
 */
 
+import type { Page } from '@playwright/test';
 import { createDomainObjectWithDefaults, setTimeConductorBounds } from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
@@ -104,7 +105,7 @@ test.describe('Log plot tests', () => {
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function testRegularTicks(page) {
+async function testRegularTicks(page: Page) {
   const yTicks = page.locator('.gl-plot-y-tick-label');
   await expect(yTicks).toHaveCount(7);
   await expect(yTicks.nth(0)).toHaveText('-2');
@@ -119,7 +120,7 @@ async function testRegularTicks(page) {
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function testLogTicks(page) {
+async function testLogTicks(page: Page) {
   const yTicks = page.locator('.gl-plot-y-tick-label');
   await expect(yTicks).toHaveCount(9);
   await expect(yTicks.nth(0)).toHaveText('-2.98');
@@ -136,7 +137,7 @@ async function testLogTicks(page) {
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function enableEditMode(page) {
+async function enableEditMode(page: Page) {
   // turn on edit mode
   await page.getByRole('button', { name: 'Edit Object' }).click();
   await expect(page.getByRole('button', { name: 'Save' })).toBeVisible();
@@ -145,7 +146,7 @@ async function enableEditMode(page) {
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function enableLogMode(page) {
+async function enableLogMode(page: Page) {
   await expect(page.getByRole('checkbox', { name: 'Log mode' })).not.toBeChecked();
   await page.getByRole('checkbox', { name: 'Log mode' }).check();
 }
@@ -153,7 +154,7 @@ async function enableLogMode(page) {
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function disableLogMode(page) {
+async function disableLogMode(page: Page) {
   await expect(page.getByRole('checkbox', { name: 'Log mode' })).toBeChecked();
   await page.getByRole('checkbox', { name: 'Log mode' }).uncheck();
 }
@@ -163,7 +164,7 @@ async function disableLogMode(page) {
  */
 // FIXME: Remove this eslint exception once implemented
 // eslint-disable-next-line no-unused-vars
-async function testLogPlotPixels(page) {
+async function testLogPlotPixels(page: Page) {
   const pixelsMatch = await page.evaluate(async () => {
     // TODO get canvas pixels at a few locations to make sure they're the correct color, to test that the plot comes out as expected.
 
@@ -202,9 +203,9 @@ async function testLogPlotPixels(page) {
     // icons (canvas 2d), which is the one we are testing. The second
     // one in the DOM is the WebGL canvas with the line. (Why aren't
     // they both WebGL?)
-    const canvas = document.querySelector('canvas');
+    const canvas = document.querySelector('canvas')!;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d')!;
 
     for (const pixel of expectedBluePixels) {
       // XXX Possible optimization: call getImageData only once with

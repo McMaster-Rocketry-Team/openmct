@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 import { createDomainObjectWithDefaults, setTimeConductorBounds , type CreatedObjectInfo} from '../../../../appActions.ts';
 
@@ -82,7 +83,7 @@ test.describe('Time Tick Generation', () => {
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function testYearTimeSeriesTicks(page) {
+async function testYearTimeSeriesTicks(page: Page) {
   const xTicks = page.locator('.gl-plot-x-tick-label');
   await expect(xTicks).toHaveCount(7);
   await expect(xTicks.nth(0)).toHaveText('2022-09-01');
@@ -94,7 +95,7 @@ async function testYearTimeSeriesTicks(page) {
   await expect(xTicks.nth(6)).toHaveText('2023-03-01');
 }
 
-async function testDaysTimeSeriesTicks(page) {
+async function testDaysTimeSeriesTicks(page: Page) {
   const xTicks = page.locator('.gl-plot-x-tick-label');
   await expect(xTicks).toHaveCount(10);
   await expect(xTicks.nth(0)).toHaveText('2023-03-24');
@@ -109,7 +110,7 @@ async function testDaysTimeSeriesTicks(page) {
   await expect(xTicks.nth(9)).toHaveText('2023-04-20');
 }
 
-async function testHoursTimeSeriesTicks(page) {
+async function testHoursTimeSeriesTicks(page: Page) {
   const xTicks = page.locator('.gl-plot-x-tick-label');
   await expect(xTicks).toHaveCount(8);
   await expect(xTicks.nth(0)).toHaveText('02:00:00');
@@ -122,7 +123,7 @@ async function testHoursTimeSeriesTicks(page) {
   await expect(xTicks.nth(7)).toHaveText('09:00:00');
 }
 
-async function testMinutesTimeSeriesTicks(page) {
+async function testMinutesTimeSeriesTicks(page: Page) {
   const xTicks = page.locator('.gl-plot-x-tick-label');
   await expect(xTicks).toHaveCount(10);
   await expect(xTicks.nth(0)).toHaveText('01:16:00');
@@ -137,7 +138,7 @@ async function testMinutesTimeSeriesTicks(page) {
   await expect(xTicks.nth(9)).toHaveText('01:34:00');
 }
 
-async function testSecondsTimeSeriesTicks(page) {
+async function testSecondsTimeSeriesTicks(page: Page) {
   const xTicks = page.locator('.gl-plot-x-tick-label');
   await expect(xTicks).toHaveCount(11);
   await expect(xTicks.nth(0)).toHaveText('01:22:00');

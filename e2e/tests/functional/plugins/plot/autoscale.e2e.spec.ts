@@ -28,6 +28,7 @@ import {
   createDomainObjectWithDefaults,
   navigateToObjectWithFixedTimeBounds
 } from '../../../../appActions.ts';
+import type { Page } from '@playwright/test';
 import { expect, test } from '../../../../pluginFixtures.ts';
 test.use({
   viewport: {
@@ -100,7 +101,7 @@ test.describe('Autoscale', () => {
 
     expect
       .soft(await canvas.screenshot())
-      .toMatchSnapshot('autoscale-canvas-prepan.png', { animations: 'disabled' });
+      .toMatchSnapshot('autoscale-canvas-prepan.png');
 
     //Alt Drag Start
     await page.keyboard.down('Alt');
@@ -127,17 +128,17 @@ test.describe('Autoscale', () => {
 
     expect
       .soft(await canvas.screenshot())
-      .toMatchSnapshot('autoscale-canvas-panned.png', { animations: 'disabled' });
+      .toMatchSnapshot('autoscale-canvas-panned.png');
   });
 });
 
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function testYTicks(page, values) {
+async function testYTicks(page: Page, values: string[]) {
   const yTicks = page.locator('.gl-plot-y-tick-label');
   await page.locator('canvas >> nth=1').hover();
-  let promises = [yTicks.count().then((c) => expect(c).toBe(values.length))];
+  let promises = [yTicks.count().then((c: number) => expect(c).toBe(values.length))];
 
   for (let i = 0, l = values.length; i < l; i += 1) {
     promises.push(expect.soft(yTicks.nth(i)).toHaveText(values[i])); // eslint-disable-line

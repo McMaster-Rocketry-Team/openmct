@@ -25,6 +25,7 @@ Tests to verify log plot functionality. Note this test suite if very much under 
 necessarily be used for reference when writing new tests in this area.
 */
 
+import type { Page } from '@playwright/test';
 import { createDomainObjectWithDefaults, waitForPlotsToRender , type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
@@ -359,7 +360,7 @@ test.describe('Stacked Plot', () => {
  * Asserts that aggregate stacked plot legend is visible
  * @param {import('@playwright/test').Page} page
  */
-async function assertAggregateLegendIsVisible(page) {
+async function assertAggregateLegendIsVisible(page: Page) {
   // Wait for plot series data to load
   await waitForPlotsToRender(page);
   // Wait for plot legend to be shown

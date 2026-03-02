@@ -56,11 +56,11 @@ test.describe('Handle missing object for plots', () => {
     });
 
     //Gets local storage and deletes the last sine wave generator in the stacked plot
-    const mct = await page.evaluate(() => window.localStorage.getItem('mct'));
+    const mct = (await page.evaluate(() => window.localStorage.getItem('mct')))!;
     const parsedData = JSON.parse(mct);
-    const key = Object.entries(parsedData).find(([, value]) => value.type === 'generator')?.[0];
+    const key = Object.entries(parsedData).find(([, value]) => (value as Record<string, unknown>).type === 'generator')?.[0];
 
-    delete parsedData[key];
+    delete parsedData[key!];
 
     //Sets local storage with missing object
     const jsonData = JSON.stringify(parsedData);

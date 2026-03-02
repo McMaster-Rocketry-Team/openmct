@@ -25,6 +25,7 @@ Tests to verify log plot functionality. Note this test suite if very much under 
 necessarily be used for reference when writing new tests in this area.
 */
 
+import type { Page } from '@playwright/test';
 import {
   createDomainObjectWithDefaults,
   getCanvasPixels,
@@ -228,7 +229,7 @@ test.describe('Overlay Plot', () => {
 
     const newCoords = await assertLimitLinesExistAndAreVisible(page);
     // We just need to know that the first limit line redrew somewhere lower than the initial y position.
-    expect(newCoords.y).toBeGreaterThan(initialCoords.y);
+    expect(newCoords!.y).toBeGreaterThan(initialCoords!.y);
   });
 
   test('The elements pool supports dragging series into multiple y-axis buckets', async ({
@@ -383,7 +384,7 @@ test.describe('Overlay Plot', () => {
  * Asserts that limit lines exist and are visible
  * @param {import('@playwright/test').Page} page
  */
-async function assertLimitLinesExistAndAreVisible(page) {
+async function assertLimitLinesExistAndAreVisible(page: Page) {
   // Wait for plot series data to load
   await waitForPlotsToRender(page);
   // Wait for limit lines to be created
