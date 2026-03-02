@@ -20,6 +20,8 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
+import type { Page } from '@playwright/test';
+import { type CreatedObjectInfo } from '../../../../appActions.ts';
 import {
   dragAndDropEmbed,
   enterTextEntry,
@@ -82,7 +84,7 @@ test.describe('Restricted Notebook with at least one entry and with the page loc
 
   test('Locked page should now be in a locked state @addInit', async ({ page }, testInfo) => {
     // eslint-disable-next-line playwright/no-skipped-test
-    test.skip(testInfo.project === 'chrome-beta', 'Test is unreliable on chrome-beta');
+    test.skip(testInfo.project.name === 'chrome-beta', 'Test is unreliable on chrome-beta');
     // main lock message on page
     const lockMessage = page.locator(
       'text=This page has been committed and cannot be modified or removed'
@@ -192,7 +194,7 @@ test.describe('can export restricted notebook as text', () => {
  * @param {import('@playwright/test').Page} page
  * @param {string} url the url to the object
  */
-async function openObjectTreeContextMenu(page, url) {
+async function openObjectTreeContextMenu(page: Page, url: string) {
   await page.goto(url);
   await page.getByLabel('Show selected item in tree').click();
   await page.locator('.is-navigated-object').click({

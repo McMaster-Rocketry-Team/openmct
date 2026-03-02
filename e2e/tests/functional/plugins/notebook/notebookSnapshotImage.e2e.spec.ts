@@ -134,7 +134,7 @@ test.describe('Snapshot image failure tests', () => {
 
     const bigDropTransfer = await page.evaluateHandle(() => {
       const dataTransfer = new DataTransfer();
-      const file = new File([window.bigGarbageData], 'bigBoy.png', { type: 'image/png' });
+      const file = new File([(window as unknown as Record<string, unknown>).bigGarbageData as BlobPart], 'bigBoy.png', { type: 'image/png' });
       dataTransfer.items.add(file);
       return dataTransfer;
     });

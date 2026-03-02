@@ -28,6 +28,7 @@ import {
   setRealTimeMode,
   setStartOffset
 , type CreatedObjectInfo} from '../../../../appActions.ts';
+import type { Page } from '@playwright/test';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
 test.describe('Testing LAD table configuration', () => {
@@ -270,7 +271,7 @@ test.describe('Testing LAD table', () => {
     // On getting data, check if the value found in the LAD table is the most recent value
     // from the Sine Wave Generator
     const getTelemValuePromise = getNextSineValueFromSWG(page, sineWaveObject.uuid);
-    const subscribeTelemValue = await getTelemValuePromise;
+    const subscribeTelemValue = (await getTelemValuePromise) as string;
     await expect(page.getByLabel('lad value')).toHaveText(subscribeTelemValue);
     const ladTableValue = await page.getByText(subscribeTelemValue).textContent();
 
@@ -303,7 +304,7 @@ test.describe('Testing LAD table', () => {
 
     // On getting data, check if the value found in the LAD table is the most recent value
     // from the Sine Wave Generator
-    const subscribeTelemValue = await getTelemValuePromise;
+    const subscribeTelemValue = (await getTelemValuePromise) as string;
     await expect(page.getByLabel('lad value')).toHaveText(subscribeTelemValue);
   });
 });
@@ -315,7 +316,7 @@ test.describe('Testing LAD table', () => {
  * @param {import('@playwright/test').Page} page
  * @param {string} url the url to the object
  */
-async function openObjectTreeContextMenu(page, url) {
+async function openObjectTreeContextMenu(page: Page, url: string) {
   await page.goto(url);
   await page.getByLabel('Show selected item in tree').click();
   await page.locator('.is-navigated-object').click({

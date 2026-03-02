@@ -30,6 +30,7 @@ This test suite is dedicated to tests which verify the basic operations surround
  */
 /* eslint-disable playwright/no-networkidle */
 
+import type { Page, Request, Response } from '@playwright/test';
 import { createDomainObjectWithDefaults , type CreatedObjectInfo} from '../../../../appActions.ts';
 import * as nbUtils from '../../../../helper/notebookUtils.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
@@ -51,7 +52,7 @@ test.describe('Notebook Tests with CouchDB @couchdb @network', () => {
     await page.locator('.c-notebook__toggle-nav-button').click();
 
     // Collect all request events to count and assert after notebook action
-    let notebookElementsRequests = [];
+    let notebookElementsRequests: Request[] = [];
     page.on('request', (request) => notebookElementsRequests.push(request));
 
     //Clicking Add Page generates
@@ -211,7 +212,7 @@ test.describe('Notebook Tests with CouchDB @couchdb @network', () => {
 
 // Try to reduce indeterminism of browser requests by only returning fetch requests.
 // Filter out preflight CORS, fetching stylesheets, page icons, etc. that can occur during tests
-function filterNonFetchRequests(requests) {
+function filterNonFetchRequests(requests: Request[]) {
   return requests.filter((request) => {
     return request.resourceType() === 'fetch';
   });
@@ -223,7 +224,7 @@ function filterNonFetchRequests(requests) {
  * @param {import('@playwright/test').Page} page
  * @param {string} tagName
  */
-async function addTagAndAwaitNetwork(page, tagName) {
+async function addTagAndAwaitNetwork(page: Page, tagName: string) {
   await page.hover(`button:has-text("Add Tag")`);
   await page.locator(`button:has-text("Add Tag")`).click();
   await page.locator('[placeholder="Type to select tag"]').click();
@@ -243,13 +244,13 @@ async function addTagAndAwaitNetwork(page, tagName) {
  * @param {import('@playwright/test').Page} page
  * @param {string} tagName
  */
-async function removeTagAndAwaitNetwork(page, tagName) {
+async function removeTagAndAwaitNetwork(page: Page, tagName: string) {
   await page.hover(`[aria-label="Tag"]:has-text("${tagName}")`);
   await Promise.all([
     page.locator(`[aria-label="Remove tag ${tagName}"]`).click(),
     //With this pattern, we're awaiting the response but asserting on the request payload.
     page.waitForResponse(
-      (resp) => resp.request().postData().includes(`"_deleted":true`) && resp.status() === 201
+      (resp: Response) => resp.request().postData()?.includes(`"_deleted":true`) === true && resp.status() === 201
     )
   ]);
   await expect(page.locator(`[aria-label="Tag"]:has-text("${tagName}")`)).toBeHidden();

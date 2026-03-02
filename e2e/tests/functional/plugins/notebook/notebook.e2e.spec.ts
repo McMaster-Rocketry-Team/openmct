@@ -30,6 +30,7 @@ import {
   createDomainObjectWithDefaults,
   renameCurrentObjectFromBrowseBar
 , type CreatedObjectInfo} from '../../../../appActions.ts';
+import type { Page } from '@playwright/test';
 import { copy, paste, selectAll } from '../../../../helper/hotkeys/hotkeys.ts';
 import * as nbUtils from '../../../../helper/notebookUtils.ts';
 import { expect, streamToString, test } from '../../../../pluginFixtures.ts';
@@ -639,7 +640,7 @@ test.describe('Notebook entry tests', () => {
  * @param {import('@playwright/test').Page} page
  * @param {string} text
  */
-async function enterAndCommitTextEntry(page, text) {
+async function enterAndCommitTextEntry(page: Page, text: string) {
   await nbUtils.addNotebookEntry(page);
   await nbUtils.enterTextInLastEntry(page, text);
   await nbUtils.commitEntry(page);
@@ -651,7 +652,7 @@ async function enterAndCommitTextEntry(page, text) {
  * @param {import('@playwright/test').Page} page
  * @param {string} newName
  */
-async function verifyNameChange(page, newName) {
+async function verifyNameChange(page: Page, newName: string) {
   await expect(
     page.getByRole('treeitem').locator('.is-navigated-object .c-tree__item__name')
   ).toHaveText(newName);
