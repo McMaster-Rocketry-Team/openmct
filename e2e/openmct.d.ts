@@ -145,7 +145,7 @@ declare module 'openmct' {
     request?(domainObject: DomainObject, options?: TelemetryRequestOptions): Promise<object[]>;
     subscribe?(
       domainObject: DomainObject,
-      callback: (datum: object) => void,
+      callback: (datum: Record<string, unknown>) => void,
       options?: TelemetrySubscriptionOptions
     ): () => void;
     getMetadata?(domainObject: DomainObject): ValueMetadata[];
@@ -662,7 +662,7 @@ declare module 'openmct' {
     isMissing(domainObject: DomainObject): boolean;
     supportsMutation(identifier: Identifier): boolean;
     getOriginalPath(
-      identifierOrObject: Identifier | DomainObject,
+      identifierOrObject: string | Identifier | DomainObject,
       path?: DomainObject[],
       abortSignal?: AbortSignal
     ): Promise<DomainObject[]>;
@@ -709,7 +709,7 @@ declare module 'openmct' {
     ): Promise<object[]>;
     subscribe(
       domainObject: DomainObject,
-      callback: (datum: object) => void,
+      callback: (datum: Record<string, unknown>) => void,
       options?: TelemetrySubscriptionOptions
     ): () => void;
     subscribeToStaleness(

@@ -59,7 +59,7 @@ import { v4 as genUuid } from 'uuid';
 
 declare global {
   interface Window {
-    openmct: any;
+    openmct: import('openmct').default;
   }
 }
 
@@ -67,6 +67,9 @@ export interface CreatedObjectInfo {
   name: string;
   uuid: string;
   url: string;
+  /** Optional path property, can be set by tests for tooltip verification etc. */
+  path?: string;
+  [key: string]: string | undefined;
 }
 
 /**
@@ -82,12 +85,25 @@ export interface CreatedObjectInfo {
  */
 async function createDomainObjectWithDefaults(
   page: Page,
-  { type, name, parent = 'mine' }: { type: string; name?: string; parent?: string },
+  {
+    type,
+    name,
+    parent = 'mine',
+    customParameters
+  }: {
+    type: string;
+    name?: string;
+    parent?: string;
+    customParameters?: Record<string, string>;
+  },
   additionalOptions: Record<string, string> = {}
 ): Promise<CreatedObjectInfo> {
   if (!name) {
     name = `${type}:${genUuid()}`;
   }
+
+  // Merge customParameters into additionalOptions if provided
+  const allOptions = { ...additionalOptions, ...(customParameters || {}) };
 
   const parentUrl = await getHashUrlToDomainObject(page, parent);
 
@@ -105,8 +121,8 @@ async function createDomainObjectWithDefaults(
   await page.getByLabel('Title', { exact: true }).fill('');
   await page.getByLabel('Title', { exact: true }).fill(name);
 
-  if (additionalOptions) {
-    for (const [key, value] of Object.entries(additionalOptions)) {
+  if (allOptions) {
+    for (const [key, value] of Object.entries(allOptions)) {
       // eslint-disable-next-line playwright/no-raw-locators
       await page.locator(`#form-${key}`).fill(value);
     }
@@ -146,17 +162,21 @@ async function createDomainObjectWithDefaults(
  */
 async function createNotification(
   page: Page,
-  createNotificationOptions: { message: string; severity: string; options?: object }
+  createNotificationOptions: {
+    message: string;
+    severity: string;
+    options?: Record<string, unknown>;
+  }
 ) {
   await page.evaluate((_createNotificationOptions) => {
     const { message, severity, options } = _createNotificationOptions;
     const notificationApi = window.openmct.notifications;
     if (severity === 'info') {
-      notificationApi.info(message, options);
+      notificationApi.info(message, options as Parameters<typeof notificationApi.info>[1]);
     } else if (severity === 'alert') {
-      notificationApi.alert(message, options);
+      notificationApi.alert(message, options as Parameters<typeof notificationApi.alert>[1]);
     } else {
-      notificationApi.error(message, options);
+      notificationApi.error(message, options as Parameters<typeof notificationApi.error>[1]);
     }
   }, createNotificationOptions);
 }
@@ -725,17 +745,19 @@ async function waitForPlotsToRender(page: Page, { timeout }: { timeout?: number 
  */
 async function getCanvasPixels(page: Page, canvasSelector: string) {
   const canvasHandle = await page.evaluateHandle(
-    (selector: string) => document.querySelector(selector),
+    (selector) => document.querySelector(selector) as HTMLCanvasElement,
     canvasSelector
   );
   const canvasContextHandle = await page.evaluateHandle(
-    (canvas: any) => canvas.getContext('2d'),
+    (canvas) => canvas.getContext('2d') as CanvasRenderingContext2D,
     canvasHandle
   );
 
   await waitForPlotsToRender(page);
   return page.evaluate(
-    ([canvas, ctx]: [any, any]) => {
+    (args) => {
+      const canvas = args[0] as unknown as HTMLCanvasElement;
+      const ctx = args[1] as unknown as CanvasRenderingContext2D;
       // The document canvas is where the plot points and lines are drawn.
       // The only way to access the canvas is using document (using page.evaluate)
       /** @type {ImageData} */
@@ -764,7 +786,7 @@ async function getCanvasPixels(page: Page, canvasSelector: string) {
 
       return plotPixels;
     },
-    [canvasHandle, canvasContextHandle] as any
+    [canvasHandle, canvasContextHandle]
   );
 }
 
@@ -827,11 +849,11 @@ async function getNextSineValueFromSWG(
       const telemetryObject = await window.openmct.objects.get(telemetryIdentifier);
       const metadata = window.openmct.telemetry.getMetadata(telemetryObject);
       const formats = await window.openmct.telemetry.getFormatMap(metadata);
-      window.openmct.telemetry.subscribe(telemetryObject, (obj: any) => {
+      window.openmct.telemetry.subscribe(telemetryObject, (obj: Record<string, unknown>) => {
         const sinVal = obj.sin;
         const formattedSinVal = formats.sin.format(sinVal);
         const formattedTimestamp = formats.utc.format(obj.utc);
-        (window as any)[functionName](onlyValue ? formattedSinVal : { ...obj, formattedTimestamp });
+        ((window as unknown) as Record<string, Function>)[functionName](onlyValue ? formattedSinVal : { ...obj, formattedTimestamp });
       });
     },
     {
