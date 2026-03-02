@@ -69,7 +69,6 @@ export interface CreatedObjectInfo {
   url: string;
   /** Optional path property, can be set by tests for tooltip verification etc. */
   path?: string;
-  [key: string]: string | undefined;
 }
 
 /**

@@ -972,6 +972,13 @@ declare module 'openmct' {
     branding: BrandingAPI;
     annotation: AnnotationAPI;
 
+    performance: {
+      measurements: Map<string, unknown>;
+    };
+    layout: {
+      $refs: Record<string, { $refs: Record<string, { firstChild: Node | null }> }>;
+    };
+
     setAssetPath(assetPath: string): void;
     getAssetPath(): string;
     start(domElementOrSelector?: Element | string, isHeadlessMode?: boolean): void;
