@@ -3,13 +3,14 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "strict": false,
+    "strict": true,
     "esModuleInterop": true,
     "allowJs": true,
     "noEmit": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
     "types": ["node"]
   },
   "include": [
