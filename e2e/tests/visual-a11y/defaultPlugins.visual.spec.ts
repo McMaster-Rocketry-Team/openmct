@@ -68,7 +68,7 @@ test.describe('Visual - Default @a11y', () => {
   test('Visual - Sine Wave Generator Form', async ({ page, theme }) => {
     await page.getByRole('button', { name: 'Create' }).click();
 
-    await page.getByRole('menuItem', { name: 'Sine Wave Generator' }).click();
+    await page.getByRole('menuitem', { name: 'Sine Wave Generator' }).click();
 
     await percySnapshot(page, `Default Sine Wave Generator Form (theme: '${theme}')`);
 
@@ -81,7 +81,7 @@ test.describe('Visual - Default @a11y', () => {
   test('Visual - Display Layout Icon is correct in Create Menu', async ({ page, theme }) => {
     await page.getByRole('button', { name: 'Create' }).click();
 
-    await page.getByRole('menuItem', { name: 'Display Layout' }).hover({ trial: true });
+    await page.getByRole('menuitem', { name: 'Display Layout' }).hover({ trial: true });
     await percySnapshot(page, `Display Layout Create Menu (theme: '${theme}')`);
   });
 

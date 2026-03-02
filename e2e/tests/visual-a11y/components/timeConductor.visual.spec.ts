@@ -24,6 +24,7 @@
   Tests the visual appearance of the Time Conductor component
 */
 
+import type { Locator } from '@playwright/test';
 import { expect, test } from '../../../avpFixtures.ts';
 import {
   MISSION_TIME,
@@ -72,7 +73,7 @@ test.describe('Visual - Time Conductor', () => {
       waitUntil: 'domcontentloaded'
     });
 
-    const mask = [];
+    const mask: Locator[] = [];
 
     // Take a snapshot for comparison
     const snapshot = await page.screenshot({
@@ -106,7 +107,7 @@ test.describe('Visual - Time Conductor', () => {
       // manually tick the clock to trigger the resize / re-render
       await page.clock.runFor(1000 * 2);
 
-      const mask = [];
+      const mask: Locator[] = [];
 
       // Take a snapshot for comparison
       const snapshot = await page.screenshot({

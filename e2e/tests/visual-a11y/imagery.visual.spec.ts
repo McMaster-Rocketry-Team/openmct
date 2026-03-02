@@ -83,7 +83,7 @@ test.describe('Visual - Example Imagery', () => {
     // Wait for the thumbnails to finish their scroll animation
     // (Wait until the rightmost thumbnail is in view)
     await expect(page.getByLabel('Image Thumbnail from').last()).toBeInViewport();
-    await setRealTimeMode(page, true);
+    await setRealTimeMode(page);
 
     await expect(page.getByLabel('Image Wrapper')).toBeVisible();
 

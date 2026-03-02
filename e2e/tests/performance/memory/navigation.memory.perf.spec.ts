@@ -21,6 +21,7 @@
  *****************************************************************************/
 
 import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { fileURLToPath } from 'url';
 
 const memoryLeakFilePath = fileURLToPath(
@@ -283,7 +284,7 @@ test.describe('Navigation memory leak is not detected in', () => {
    * @param {*} objectName
    * @returns
    */
-  async function navigateToObjectAndDetectMemoryLeak(page, objectName) {
+  async function navigateToObjectAndDetectMemoryLeak(page: Page, objectName: string) {
     await page.getByRole('searchbox', { name: 'Search Input' }).click();
     // Fill Search input
     await page.getByRole('searchbox', { name: 'Search Input' }).fill(objectName);
@@ -295,12 +296,15 @@ test.describe('Navigation memory leak is not detected in', () => {
     // garbage collected since it has either direct or indirect references to all resources used by the view. Therefore it's a pretty good proxy
     // for detecting memory leaks.
     await page.evaluate(() => {
-      window.gcPromise = new Promise((resolve) => {
-        window.fr = new FinalizationRegistry(resolve);
-        window.fr.register(
-          window.openmct.layout.$refs.browseObject.$refs.objectViewWrapper.firstChild,
+      const win = window as unknown as Record<string, unknown>;
+      win.gcPromise = new Promise((resolve) => {
+        win.fr = new FinalizationRegistry(resolve);
+        const layout = (window as unknown as { openmct: { layout: { $refs: Record<string, { $refs: Record<string, { firstChild: object | null }> }> } } }).openmct.layout;
+        const firstChild = layout.$refs.browseObject.$refs.objectViewWrapper.firstChild;
+        (win.fr as FinalizationRegistry<string>).register(
+          firstChild!,
           'navigatedObject',
-          window.openmct.layout.$refs.browseObject.$refs.objectViewWrapper.firstChild
+          firstChild!
         );
       });
     });
@@ -311,16 +315,18 @@ test.describe('Navigation memory leak is not detected in', () => {
     // This next code block blocks until the finalization listener is called and the gcPromise resolved. This means that the root node for the view has been garbage collected.
     // In the event that the root node is not garbage collected, the gcPromise will never resolve and the test will time out.
     await page.evaluate(() => {
-      const gcPromise = window.gcPromise;
-      window.gcPromise = null;
+      const win = window as unknown as Record<string, unknown>;
+      const gcPromise = win.gcPromise;
+      win.gcPromise = null;
 
+      const gc = (window as unknown as { gc: () => void }).gc;
       // Manually invoke the garbage collector once all references are removed.
-      window.gc();
-      window.gc();
-      window.gc();
+      gc();
+      gc();
+      gc();
 
       setTimeout(() => {
-        window.gc();
+        gc();
       }, 1000);
 
       return gcPromise;
@@ -328,7 +334,7 @@ test.describe('Navigation memory leak is not detected in', () => {
 
     // Clean up the finalization registry since we don't need it any more.
     await page.evaluate(() => {
-      window.fr = null;
+      (window as unknown as Record<string, unknown>).fr = null;
     });
 
     // If we get here without timing out, it means the garbage collection promise resolved and the test passed.

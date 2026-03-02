@@ -26,8 +26,8 @@ import { expect, test } from '../../pluginFixtures.ts';
 test.describe('Tabs View', () => {
   test('Renders tabbed elements only when visible', async ({ page }) => {
     // Code to hook into the requestAnimationFrame function and log each call
-    let animationCalls = [];
-    await page.exposeFunction('logCall', (callCount) => {
+    let animationCalls: number[] = [];
+    await page.exposeFunction('logCall', (callCount: number) => {
       animationCalls.push(callCount);
     });
     await page.addInitScript(() => {
@@ -35,7 +35,7 @@ test.describe('Tabs View', () => {
       let callCount = 0;
       window.requestAnimationFrame = function (callback) {
         // eslint-disable-next-line no-undef
-        logCall(callCount++);
+        ((window as unknown as Record<string, (n: number) => void>).logCall)(callCount++);
         return oldRequestAnimationFrame(callback);
       };
     });

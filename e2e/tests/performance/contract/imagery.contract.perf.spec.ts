@@ -139,7 +139,7 @@ test.describe('Performance tests', () => {
       return window
         .getComputedStyle(el)
         .getPropertyValue('background-image')
-        .match(/url\(([^)]+)\)/)[1];
+        .match(/url\(([^)]+)\)/)![1];
     });
     backgroundImageUrl = backgroundImageUrl.slice(1, -1); //forgive me, padre
     console.log('backgroundImageurl ' + backgroundImageUrl);
@@ -174,7 +174,7 @@ test.describe('Performance tests', () => {
       JSON.stringify(window.performance.getEntriesByType('resource'))
     );
     const resourceTiming = JSON.parse(resourceTimingJson2);
-    const jpgResourceTiming = resourceTiming.find((element) => element.name.includes('.jpg'));
+    const jpgResourceTiming = resourceTiming.find((element: { name: string }) => element.name.includes('.jpg'));
     console.log('jpgResourceTiming ' + JSON.stringify(jpgResourceTiming));
 
     // Click Close Icon
