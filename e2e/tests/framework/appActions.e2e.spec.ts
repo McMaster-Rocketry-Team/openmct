@@ -165,7 +165,7 @@ test.describe('AppActions @framework', () => {
     const examplePlanSmall1 = JSON.parse(
       fs.readFileSync(
         new URL('../../test-data/examplePlans/ExamplePlan_Small1.json', import.meta.url)
-      )
+      ).toString()
     );
     const plan = await createPlanFromJSON(page, {
       name: 'Test Plan',

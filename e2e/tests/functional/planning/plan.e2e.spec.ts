@@ -32,13 +32,13 @@ import { expect, test } from '../../../pluginFixtures.ts';
 const testPlan1 = JSON.parse(
   fs.readFileSync(
     new URL('../../../test-data/examplePlans/ExamplePlan_Small1.json', import.meta.url)
-  )
+  ).toString()
 );
 
 const testPlanWithOrderedLanes = JSON.parse(
   fs.readFileSync(
     new URL('../../../test-data/examplePlans/ExamplePlanWithOrderedLanes.json', import.meta.url)
-  )
+  ).toString()
 );
 
 test.describe('Plan', () => {

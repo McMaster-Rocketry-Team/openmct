@@ -31,7 +31,7 @@ import { expect, test } from '../../../pluginFixtures.ts';
 const examplePlanSmall1 = JSON.parse(
   fs.readFileSync(
     new URL('../../../test-data/examplePlans/ExamplePlan_Small1.json', import.meta.url)
-  )
+  ).toString()
 );
 test.describe('Time List', () => {
   test("Create a Time List, add a single Plan to it, verify all the activities are displayed with no milliseconds and selecting an activity shows it's properties", async ({

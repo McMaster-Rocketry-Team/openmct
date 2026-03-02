@@ -33,7 +33,7 @@ import {
 } from '../../helper/planningUtils.ts';
 
 const examplePlanSmall2 = JSON.parse(
-  fs.readFileSync(new URL('../../test-data/examplePlans/ExamplePlan_Small2.json', import.meta.url))
+  fs.readFileSync(new URL('../../test-data/examplePlans/ExamplePlan_Small2.json', import.meta.url)).toString()
 );
 
 const FIRST_ACTIVITY_SMALL_2 = getFirstActivity(examplePlanSmall2);

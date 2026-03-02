@@ -27,6 +27,8 @@ page.clock() API.
 
 import fs from 'fs';
 
+import type { Page } from '@playwright/test';
+
 import {
   createDomainObjectWithDefaults,
   createPlanFromJSON,
@@ -42,13 +44,13 @@ import { expect, test } from '../../../pluginFixtures.ts';
 const examplePlanSmall3 = JSON.parse(
   fs.readFileSync(
     new URL('../../../test-data/examplePlans/ExamplePlan_Small3.json', import.meta.url)
-  )
+  ).toString()
 );
 
 const examplePlanSmall1 = JSON.parse(
   fs.readFileSync(
     new URL('../../../test-data/examplePlans/ExamplePlan_Small1.json', import.meta.url)
-  )
+  ).toString()
 );
 
 const TIME_TO_FROM_COLUMN = 2;
@@ -202,7 +204,7 @@ test.describe('Activity progress when now is after end of the activity @clock', 
  * @param {number} columnIndex
  * @returns {import('@playwright/test').Locator} cell
  */
-function getTimeListCellByIndex(page, rowIndex, columnIndex) {
+function getTimeListCellByIndex(page: Page, rowIndex: number, columnIndex: number) {
   return page.getByRole('cell').nth(rowIndex * NUM_COLUMNS + columnIndex);
 }
 
@@ -213,7 +215,7 @@ function getTimeListCellByIndex(page, rowIndex, columnIndex) {
  * @param {number} columnIndex
  * @returns {Promise<string>} text
  */
-async function getTimeListCellTextByIndex(page, rowIndex, columnIndex) {
+async function getTimeListCellTextByIndex(page: Page, rowIndex: number, columnIndex: number) {
   const text = await getTimeListCellByIndex(page, rowIndex, columnIndex).innerText();
   return text;
 }
@@ -225,7 +227,7 @@ async function getTimeListCellTextByIndex(page, rowIndex, columnIndex) {
  * @param {number} rowIndex the row index
  * @returns {Promise<CountdownOrUpObject>} The countdown (or countup) object
  */
-async function getAndAssertCountdownOrUpObject(page, rowIndex) {
+async function getAndAssertCountdownOrUpObject(page: Page, rowIndex: number) {
   const timeToFrom = await getTimeListCellTextByIndex(
     page,
     HEADER_ROW + rowIndex,

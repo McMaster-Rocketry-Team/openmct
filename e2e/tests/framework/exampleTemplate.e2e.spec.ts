@@ -44,6 +44,8 @@
  */
 
 // Structure: Some standard Imports. Please update the required pathing.
+import type { Page } from '@playwright/test';
+
 import { createDomainObjectWithDefaults, createExampleTelemetryObject , type CreatedObjectInfo} from '../../appActions.ts';
 import { expect, test } from '../../pluginFixtures.ts';
 
@@ -152,7 +154,7 @@ test.describe('Advanced Example - Working with telemetry objects', () => {
  * @param {string} timerUrl The URL of the timer object to be renamed
  * @param {string} newNameForTimer New name for object
  */
-async function renameTimerFrom3DotMenu(page, timerUrl, newNameForTimer) {
+async function renameTimerFrom3DotMenu(page: Page, timerUrl: string, newNameForTimer: string) {
   // Navigate to the timer object directly
   await page.goto(timerUrl);
 

@@ -24,6 +24,7 @@
 This test suite is dedicated to tests which verify persistability checks
 */
 
+import type { Page } from '@playwright/test';
 import { fileURLToPath } from 'url';
 
 import { expect, test } from '../../baseFixtures.ts';
@@ -118,7 +119,7 @@ test.describe('Mission Status @addInit', () => {
  * @param {'Commanding'|'Imagery'|'Driving'} action
  * @param {'0'|'1'} status
  */
-async function setMissionStatus(page, action, status) {
+async function setMissionStatus(page: Page, action: string, status: string) {
   await page.getByRole('combobox', { name: action }).selectOption(status);
   await expect(
     page.getByRole('alert').filter({ hasText: 'Successfully set mission status' })
