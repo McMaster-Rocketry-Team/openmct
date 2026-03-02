@@ -258,7 +258,7 @@ test.describe('Persistence operations @couchdb @network', () => {
     ).toBeVisible();
 
     // Page 1: Start logging console errors from this point on
-    let errors = [];
+    let errors: string[] = [];
     page.on('console', (msg) => {
       if (msg.type() === 'error') {
         errors.push(msg.text());
@@ -274,8 +274,7 @@ test.describe('Persistence operations @couchdb @network', () => {
     await page
       .locator('.c-message-banner__message', {
         hasText:
-          'Do not navigate away from this page or close this browser tab while this message is displayed.',
-        state: 'visible'
+          'Do not navigate away from this page or close this browser tab while this message is displayed.'
       })
       .waitFor({ state: 'hidden' });
 

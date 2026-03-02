@@ -125,9 +125,9 @@ test.describe('Bootstrapping Open MCT', () => {
     const errorMessage = await page.evaluate(() => {
       try {
         // eslint-disable-next-line no-undef
-        openmct.start(' ');
+        (window as { openmct: { start: (s: string) => void } }).openmct.start(' ');
       } catch (error) {
-        return error.message;
+        return (error as Error).message;
       }
     });
     expect(errorMessage).toContain('Invalid HTML element or selector');
@@ -156,9 +156,9 @@ test.describe('Bootstrapping Open MCT', () => {
     const errorMessage = await page.evaluate(() => {
       try {
         // eslint-disable-next-line no-undef
-        openmct.start('someInvalidSelector1a2s3d4f5g6h7j8l');
+        (window as { openmct: { start: (s: string) => void } }).openmct.start('someInvalidSelector1a2s3d4f5g6h7j8l');
       } catch (error) {
-        return error.message;
+        return (error as Error).message;
       }
     });
     expect(errorMessage).toContain(

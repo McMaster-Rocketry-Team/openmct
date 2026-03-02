@@ -324,12 +324,16 @@ async function createStableStateTelemetry(
 async function navigateToObjectWithFixedTimeBounds(
   page: Page,
   url: string,
-  start: string | number,
-  end: string | number
+  start?: string | number,
+  end?: string | number
 ) {
-  await page.goto(
-    `${url}?tc.mode=fixed&tc.timeSystem=utc&tc.startBound=${start}&tc.endBound=${end}`
-  );
+  if (start !== undefined && end !== undefined) {
+    await page.goto(
+      `${url}?tc.mode=fixed&tc.timeSystem=utc&tc.startBound=${start}&tc.endBound=${end}`
+    );
+  } else {
+    await page.goto(`${url}?tc.mode=fixed&tc.timeSystem=utc`);
+  }
 }
 
 /**

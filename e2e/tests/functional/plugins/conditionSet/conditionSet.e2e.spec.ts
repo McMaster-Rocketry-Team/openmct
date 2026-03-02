@@ -33,7 +33,7 @@ import {
 , type CreatedObjectInfo} from '../../../../appActions.ts';
 import { expect, test } from '../../../../pluginFixtures.ts';
 
-let conditionSetUrl;
+let conditionSetUrl: string;
 
 test.describe.serial('Condition Set CRUD Operations on @localStorage @2p', () => {
   test.beforeAll(async ({ browser }) => {

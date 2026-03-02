@@ -79,8 +79,16 @@ test.describe('Correlation Telemetry', () => {
     const getSWG1ValuePromise = getNextSineValueFromSWG(page, sineWaveGenerator1.uuid, false);
     const getSWG2ValuePromise = getNextSineValueFromSWG(page, sineWaveGenerator2.uuid, false);
 
-    const swg1Value = await getSWG1ValuePromise;
-    const swg2Value = await getSWG2ValuePromise;
+    const swg1Value = (await getSWG1ValuePromise) as {
+      sin: string;
+      formattedTimestamp: string;
+      utc: string;
+    };
+    const swg2Value = (await getSWG2ValuePromise) as {
+      sin: string;
+      formattedTimestamp: string;
+      utc: string;
+    };
     const correlatedTelemetryObject = {
       x: swg1Value.sin,
       y: swg2Value.sin,
@@ -94,9 +102,9 @@ test.describe('Correlation Telemetry', () => {
 
     // check that the x and y values are correlated in the same row, based on column names: x and y, respectively
     const telemetryTableRows = page.getByRole('row');
-    const correlatedRow = telemetryTableRows.filter((row) =>
-      row.getByText(correlatedTelemetryObject.formattedTimestamp).isVisible()
-    );
+    const correlatedRow = telemetryTableRows.filter({
+      has: page.getByText(correlatedTelemetryObject.formattedTimestamp)
+    });
     await expect(
       correlatedRow.getByLabel(`x table cell ${correlatedTelemetryObject.x}`).first()
     ).toBeVisible();
