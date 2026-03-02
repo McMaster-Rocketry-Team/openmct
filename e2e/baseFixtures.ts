@@ -27,11 +27,25 @@
  * GitHub issues.
  */
 
+import type { ConsoleMessage, Locator } from '@playwright/test';
 import { expect, request, test } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuid } from 'uuid';
+
+declare global {
+  interface Window {
+    __coverage__: unknown;
+    collectIstanbulCoverage: (coverageJSON: string) => void;
+  }
+}
+
+type BaseFixtures = {
+  coveragePath: string;
+  failOnConsoleError: boolean;
+  ignore404s: (string | RegExp)[];
+};
 
 /**
  * Takes a `ConsoleMessage` and returns a formatted string. Used to enable console log error detection.
@@ -40,7 +54,7 @@ import { v4 as uuid } from 'uuid';
  * @param {import('@playwright/test').ConsoleMessage} msg
  * @returns {string} formatted string with message type, text, url, and line and column numbers
  */
-function _consoleMessageToString(msg) {
+function _consoleMessageToString(msg: ConsoleMessage) {
   const { url, lineNumber, columnNumber } = msg.location();
 
   return `[${msg.type()}] ${msg.text()} at (${url} ${lineNumber}:${columnNumber})`;
@@ -53,7 +67,7 @@ function _consoleMessageToString(msg) {
  * @param {import('@playwright/test').Locator} locator
  * @return {Promise<Animation[]>}
  */
-function waitForAnimations(locator) {
+function waitForAnimations(locator: Locator) {
   return locator.evaluate((element) =>
     Promise.all(element.getAnimations({ subtree: true }).map((animation) => animation.finished))
   );
@@ -61,7 +75,7 @@ function waitForAnimations(locator) {
 
 const istanbulCLIOutput = fileURLToPath(new URL('.nyc_output', import.meta.url));
 
-const extendedTest = test.extend({
+const extendedTest = test.extend<BaseFixtures>({
   /**
    * Path to output raw coverage files. Can be overridden in Playwright config file.
    * @see {@link https://github.com/mxschmitt/playwright-test-coverage Github Example Project}
@@ -80,7 +94,7 @@ const extendedTest = test.extend({
       )
     );
     await fs.promises.mkdir(coveragePath, { recursive: true });
-    await context.exposeFunction('collectIstanbulCoverage', (coverageJSON) => {
+    await context.exposeFunction('collectIstanbulCoverage', (coverageJSON: string) => {
       if (coverageJSON) {
         fs.writeFileSync(
           path.join(coveragePath, `playwright_coverage_${uuid()}.json`),
@@ -110,7 +124,7 @@ const extendedTest = test.extend({
    */
   page: async ({ page, failOnConsoleError, ignore404s }, use) => {
     // Capture any console errors during test execution
-    let messages = [];
+    let messages: ConsoleMessage[] = [];
     page.on('console', (msg) => messages.push(msg));
 
     await use(page);
