@@ -32,7 +32,7 @@ import {
   setRealTimeMode,
   setStartOffset
 , type CreatedObjectInfo} from '../../../../appActions.ts';
-import type { CreatedObjectInfo } from '../../../../appActions.ts';
+
 import { MISSION_TIME } from '../../../../constants.ts';
 import {
   createImageryViewWithShortDelay,

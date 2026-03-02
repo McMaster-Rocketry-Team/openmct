@@ -170,7 +170,7 @@ test.describe('Gauge', () => {
 
   test('Gauge does not break when an object is missing', async ({ page }) => {
     // Set up error listeners
-    const pageErrors = [];
+    const pageErrors: string[] = [];
 
     // Listen for uncaught exceptions
     page.on('pageerror', (err) => {
@@ -192,7 +192,7 @@ test.describe('Gauge', () => {
     await page.evaluate(
       ([missingObject]) => {
         const mct = localStorage.getItem('mct');
-        const mctObjects = JSON.parse(mct);
+        const mctObjects = JSON.parse(mct!);
         delete mctObjects[missingObject.uuid];
         localStorage.setItem('mct', JSON.stringify(mctObjects));
       },

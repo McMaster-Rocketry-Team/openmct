@@ -196,7 +196,7 @@ test.describe('ExportAsJSON ProgressBar @couchdb', () => {
  * @returns {string} The first key found in the 'openmct' object.
  * @throws {Error} If no keys are found in the 'openmct' object.
  */
-function getFirstKeyFromOpenMctJson(jsonData) {
+function getFirstKeyFromOpenMctJson(jsonData: Record<string, Record<string, unknown>>) {
   if (!jsonData.openmct) {
     throw new Error("The provided JSON object does not have an 'openmct' property.");
   }

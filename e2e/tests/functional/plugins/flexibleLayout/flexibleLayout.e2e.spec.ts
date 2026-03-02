@@ -35,9 +35,9 @@ const LOCALSTORAGE_PATH = fileURLToPath(
 
 test.describe('Flexible Layout', () => {
   let sineWaveObject: CreatedObjectInfo;
-  let clockObject;
+  let clockObject: CreatedObjectInfo;
   let treePane: Locator;
-  let sineWaveGeneratorTreeItem: CreatedObjectInfo;
+  let sineWaveGeneratorTreeItem: Locator;
   let clockTreeItem: Locator;
   let flexibleLayout: CreatedObjectInfo;
   test.beforeEach(async ({ page }) => {

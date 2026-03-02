@@ -85,8 +85,8 @@ test.describe('Testing numeric data with inspector data visualization (i.e., dat
 
     // Verify that "Open in New Tab" preserves the time bounds
     await expect(initStartBounds).toHaveText(
-      await newPage.getByLabel('Start bounds').textContent()
+      (await newPage.getByLabel('Start bounds').textContent())!
     );
-    expect(initEndBounds).toEqual(await newPage.getByLabel('End bounds').textContent());
+    expect(initEndBounds).toEqual((await newPage.getByLabel('End bounds').textContent())!);
   });
 });
