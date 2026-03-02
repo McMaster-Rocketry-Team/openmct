@@ -20,7 +20,10 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
+import type { Locator, Page } from '@playwright/test';
+
 import { waitForPlotsToRender } from '../appActions.ts';
+import type { CreatedObjectInfo } from '../appActions.ts';
 import { expect } from '../pluginFixtures.ts';
 
 /**
@@ -31,7 +34,7 @@ import { expect } from '../pluginFixtures.ts';
  * @param {number} yEnd a telemetry item with a plot
  * @returns {Promise}
  */
-export async function createTags({ page, canvas, xEnd = 700, yEnd = 520 }) {
+export async function createTags({ page, canvas, xEnd = 700, yEnd = 520 }: { page: Page; canvas: Locator; xEnd?: number; yEnd?: number }) {
   await canvas.hover({ trial: true });
 
   //Alt+Shift Drag Start to select some points to tag
@@ -73,7 +76,7 @@ export async function createTags({ page, canvas, xEnd = 700, yEnd = 520 }) {
  * @param {import('../../../../appActions').CreatedObjectInfo} telemetryItem a telemetry item with a plot
  * @returns {Promise}
  */
-export async function testTelemetryItem(page, telemetryItem) {
+export async function testTelemetryItem(page: Page, telemetryItem: CreatedObjectInfo) {
   // Check that telemetry item also received the tag
   await page.goto(telemetryItem.url);
   await page.getByRole('tab', { name: 'Annotations' }).click();
@@ -105,7 +108,7 @@ export async function testTelemetryItem(page, telemetryItem) {
  * @param {import('@playwright/test').Page} page
  * @returns {Promise}
  */
-export async function basicTagsTests(page) {
+export async function basicTagsTests(page: Page) {
   // Search for Driving
   await page.getByRole('searchbox', { name: 'Search Input' }).click();
 

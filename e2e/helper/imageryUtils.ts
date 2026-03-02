@@ -1,3 +1,5 @@
+import type { Page } from '@playwright/test';
+
 import { createDomainObjectWithDefaults } from '../appActions.ts';
 import { expect } from '../pluginFixtures.ts';
 
@@ -9,7 +11,7 @@ const MOUSE_WHEEL_DELTA_Y = 120;
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function createImageryViewWithShortDelay(page, { name, parent }) {
+async function createImageryViewWithShortDelay(page: Page, { name, parent }: { name?: string; parent?: string }) {
   await createDomainObjectWithDefaults(page, {
     name,
     type: 'Example Imagery',

@@ -20,17 +20,20 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
+import type { Page } from '@playwright/test';
+import { fileURLToPath } from 'url';
+
 import { createDomainObjectWithDefaults } from '../appActions.ts';
+import type { CreatedObjectInfo } from '../appActions.ts';
 
 const NOTEBOOK_DROP_AREA = '.c-notebook__drag-area';
 const CUSTOM_NAME = 'CUSTOM_NAME';
-import { fileURLToPath } from 'url';
 
 /**
  * @param {import('@playwright/test').Page} page
  * @param {string} text
  */
-async function enterTextEntry(page, text) {
+async function enterTextEntry(page: Page, text: string) {
   await addNotebookEntry(page);
   await enterTextInLastEntry(page, text);
   await commitEntry(page);
@@ -39,21 +42,21 @@ async function enterTextEntry(page, text) {
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function addNotebookEntry(page) {
+async function addNotebookEntry(page: Page) {
   await page.locator(NOTEBOOK_DROP_AREA).click();
 }
 
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function enterTextInLastEntry(page, text) {
+async function enterTextInLastEntry(page: Page, text: string) {
   await page.getByLabel('Notebook Entry Input').last().fill(text);
 }
 
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function dragAndDropEmbed(page, notebookObject) {
+async function dragAndDropEmbed(page: Page, notebookObject: CreatedObjectInfo) {
   // Create example telemetry object
   const swg = await createDomainObjectWithDefaults(page, {
     type: 'Sine Wave Generator'
@@ -71,7 +74,7 @@ async function dragAndDropEmbed(page, notebookObject) {
  * @private
  * @param {import('@playwright/test').Page} page
  */
-async function commitEntry(page) {
+async function commitEntry(page: Page) {
   //Click the Commit Entry button
   await page.locator('.c-ne__save-button > button').click();
 }
@@ -79,7 +82,7 @@ async function commitEntry(page) {
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function startAndAddRestrictedNotebookObject(page) {
+async function startAndAddRestrictedNotebookObject(page: Page) {
   await page.addInitScript({
     path: fileURLToPath(new URL('./addInitRestrictedNotebook.js', import.meta.url))
   });
@@ -95,7 +98,7 @@ async function startAndAddRestrictedNotebookObject(page) {
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function lockPage(page) {
+async function lockPage(page: Page) {
   // Click the Commit Entries button
   await page.getByLabel('Commit Entries').click();
   // Wait until Lock Banner is visible
@@ -107,7 +110,7 @@ async function lockPage(page) {
  * @param {import('@playwright/test').Page} - page to load
  * @param {number} [iterations = 1] - the number of entries to create
  */
-async function createNotebookAndEntry(page, iterations = 1) {
+async function createNotebookAndEntry(page: Page, iterations = 1) {
   const notebook = createDomainObjectWithDefaults(page, { type: 'Notebook' });
 
   for (let iteration = 0; iteration < iterations; iteration++) {
@@ -122,7 +125,7 @@ async function createNotebookAndEntry(page, iterations = 1) {
  * @param {import('@playwright/test').Page} page
  * @param {number} [iterations = 1] - the number of entries (and tags) to create
  */
-async function createNotebookEntryAndTags(page, iterations = 1) {
+async function createNotebookEntryAndTags(page: Page, iterations = 1) {
   const notebook = await createNotebookAndEntry(page, iterations);
   await page.getByRole('tab', { name: 'Annotations' }).click();
 

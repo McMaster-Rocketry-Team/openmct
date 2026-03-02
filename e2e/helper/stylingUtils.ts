@@ -20,6 +20,8 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
+import type { Locator, Page } from '@playwright/test';
+
 import { expect } from '../pluginFixtures.ts';
 
 /**
@@ -28,7 +30,7 @@ import { expect } from '../pluginFixtures.ts';
  * @param {string} hex - The hex color value. i.e. '#5b0f00'
  * @returns {string} The RGB equivalent of the hex color.
  */
-function hexToRGB(hex) {
+function hexToRGB(hex: string) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)})`
@@ -44,7 +46,7 @@ function hexToRGB(hex) {
  * @param {string} textColorHex - The hex value of the text color to set, or 'No Style'.
  * @param {import('@playwright/test').Locator} locator - The Playwright locator for the element whose style is to be set.
  */
-async function setStyles(page, borderColorHex, backgroundColorHex, textColorHex, locator) {
+async function setStyles(page: Page, borderColorHex: string, backgroundColorHex: string, textColorHex: string, locator: Locator) {
   await locator.click(); // Assuming the locator is clickable and opens the style setting UI
   await page.getByLabel('Set border color').click();
   await page.getByLabel(borderColorHex).click();
@@ -63,12 +65,12 @@ async function setStyles(page, borderColorHex, backgroundColorHex, textColorHex,
  * @param {import('@playwright/test').Locator} locator - The Playwright locator for the element whose style is to be checked.
  */
 async function checkStyles(
-  expectedBorderColor,
-  expectedBackgroundColor,
-  expectedTextColor,
-  locator
+  expectedBorderColor: string,
+  expectedBackgroundColor: string,
+  expectedTextColor: string,
+  locator: Locator
 ) {
-  const layoutStyles = await locator.evaluate((el) => {
+  const layoutStyles = await locator.evaluate((el: Element) => {
     return {
       border: window.getComputedStyle(el).getPropertyValue('border-top-color'), //infer the left, right, and bottom
       background: window.getComputedStyle(el).getPropertyValue('background-color'),
@@ -88,8 +90,8 @@ async function checkStyles(
  * @param {string} expectedFontFamily - The expected font Type. Format as "\"Andale Mono\", sans-serif". Default is 'Default'
  * @param {import('@playwright/test').Locator} locator - The Playwright locator for the element whose style is to be checked.
  */
-async function checkFontStyles(expectedFontSize, expectedFontWeight, expectedFontFamily, locator) {
-  const layoutStyles = await locator.evaluate((el) => {
+async function checkFontStyles(expectedFontSize: string, expectedFontWeight: string, expectedFontFamily: string, locator: Locator) {
+  const layoutStyles = await locator.evaluate((el: Element) => {
     return {
       fontSize: window.getComputedStyle(el).getPropertyValue('font-size'),
       fontWeight: window.getComputedStyle(el).getPropertyValue('font-weight'),

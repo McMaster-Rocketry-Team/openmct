@@ -20,27 +20,29 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
+import type { Page } from '@playwright/test';
+
 const isMac = process.platform === 'darwin';
 const modifier = isMac ? 'Meta' : 'Control';
 
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function selectAll(page) {
+async function selectAll(page: Page) {
   await page.keyboard.press(`${modifier}+KeyA`);
 }
 
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function copy(page) {
+async function copy(page: Page) {
   await page.keyboard.press(`${modifier}+KeyC`);
 }
 
 /**
  * @param {import('@playwright/test').Page} page
  */
-async function paste(page) {
+async function paste(page: Page) {
   await page.keyboard.press(`${modifier}+KeyV`);
 }
 
