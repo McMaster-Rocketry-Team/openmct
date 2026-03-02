@@ -204,14 +204,14 @@ test.describe('Time Strip', () => {
       const endBounds = await page.getByLabel('End bounds').textContent();
 
       // Add 2 minutes to end bound datetime and use it as the new end time
-      let endTimeStamp = new Date(endBounds);
+      let endTimeStamp = new Date(endBounds!);
       endTimeStamp.setUTCMinutes(endTimeStamp.getUTCMinutes() + 2);
       const endDate = endTimeStamp.toISOString().split('T')[0];
       const milliseconds = endTimeStamp.getMilliseconds();
       const endTime = endTimeStamp.toISOString().split('T')[1].replace(`.${milliseconds}Z`, '');
 
       // Subtract 1 minute from the end bound and use it as the new start time
-      let startTimeStamp = new Date(endBounds);
+      let startTimeStamp = new Date(endBounds!);
       startTimeStamp.setUTCMinutes(startTimeStamp.getUTCMinutes() + 1);
       const startDate = startTimeStamp.toISOString().split('T')[0];
       const startMilliseconds = startTimeStamp.getMilliseconds();

@@ -235,7 +235,7 @@ async function getAndAssertCountdownOrUpObject(page: Page, rowIndex: number) {
   );
 
   expect(timeToFrom).toMatch(COUNTDOWN_REGEXP);
-  const match = timeToFrom.match(COUNTDOWN_REGEXP);
+  const match = timeToFrom.match(COUNTDOWN_REGEXP)!;
 
   return {
     sign: match[COUNTDOWN.SIGN],
