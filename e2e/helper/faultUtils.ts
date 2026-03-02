@@ -19,6 +19,7 @@
  * this source code distribution or the Licensing information page available
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
+import type { Page } from '@playwright/test';
 import { fileURLToPath } from 'url';
 
 import { expect } from '../pluginFixtures.ts';
@@ -27,7 +28,7 @@ import { expect } from '../pluginFixtures.ts';
  * @param {import('@playwright/test').Page} page
  * @returns {Promise<void>}
  */
-export async function navigateToFaultManagementWithExample(page) {
+export async function navigateToFaultManagementWithExample(page: Page) {
   await page.addInitScript({
     path: fileURLToPath(new URL('./addInitExampleFaultProvider.js', import.meta.url))
   });
@@ -39,7 +40,7 @@ export async function navigateToFaultManagementWithExample(page) {
  * @param {import('@playwright/test').Page} page
  * @returns {Promise<void>}
  */
-export async function navigateToFaultManagementWithStaticExample(page) {
+export async function navigateToFaultManagementWithStaticExample(page: Page) {
   await page.addInitScript({
     path: fileURLToPath(new URL('./addInitExampleFaultProviderStatic.js', import.meta.url))
   });
@@ -51,7 +52,7 @@ export async function navigateToFaultManagementWithStaticExample(page) {
  * @param {import('@playwright/test').Page} page
  * @returns {Promise<void>}
  */
-export async function navigateToFaultManagementWithoutExample(page) {
+export async function navigateToFaultManagementWithoutExample(page: Page) {
   await page.addInitScript({
     path: fileURLToPath(new URL('./addInitFaultManagementPlugin.js', import.meta.url))
   });
@@ -63,7 +64,7 @@ export async function navigateToFaultManagementWithoutExample(page) {
  * @param {import('@playwright/test').Page} page
  * @returns {Promise<void>}
  */
-async function navigateToFaultItemInTree(page) {
+async function navigateToFaultItemInTree(page: Page) {
   await page.goto('./', { waitUntil: 'domcontentloaded' });
   await page.waitForURL('**/#/browse/mine?**');
 
@@ -84,7 +85,7 @@ async function navigateToFaultItemInTree(page) {
  * @param {number} rowNumber
  * @returns {Promise<void>}
  */
-export async function acknowledgeFault(page, rowNumber) {
+export async function acknowledgeFault(page: Page, rowNumber: number) {
   await openFaultRowMenu(page, rowNumber);
   await page.getByLabel('Acknowledge', { exact: true }).click();
   await page.getByLabel('Save').click();
@@ -95,7 +96,7 @@ export async function acknowledgeFault(page, rowNumber) {
  * @param {...number} nums
  * @returns {Promise<void>}
  */
-export async function shelveMultipleFaults(page, ...nums) {
+export async function shelveMultipleFaults(page: Page, ...nums: number[]) {
   const selectRows = nums.map((num) => {
     return selectFaultItem(page, num);
   });
@@ -110,7 +111,7 @@ export async function shelveMultipleFaults(page, ...nums) {
  * @param {...number} nums
  * @returns {Promise<void>}
  */
-export async function acknowledgeMultipleFaults(page, ...nums) {
+export async function acknowledgeMultipleFaults(page: Page, ...nums: number[]) {
   const selectRows = nums.map((num) => {
     return selectFaultItem(page, num);
   });
@@ -125,7 +126,7 @@ export async function acknowledgeMultipleFaults(page, ...nums) {
  * @param {number} rowNumber
  * @returns {Promise<void>}
  */
-export async function shelveFault(page, rowNumber) {
+export async function shelveFault(page: Page, rowNumber: number) {
   await openFaultRowMenu(page, rowNumber);
   await page.getByLabel('Shelve', { exact: true }).click();
   await page.getByLabel('Save').click();
@@ -136,7 +137,7 @@ export async function shelveFault(page, rowNumber) {
  * @param {'severity' | 'newest-first' | 'oldest-first'} sort
  * @returns {Promise<void>}
  */
-export async function sortFaultsBy(page, sort) {
+export async function sortFaultsBy(page: Page, sort: string) {
   await page.getByTitle('Sort By').getByRole('combobox').selectOption(sort);
 }
 
@@ -145,7 +146,7 @@ export async function sortFaultsBy(page, sort) {
  * @param {'acknowledged' | 'shelved' | 'standard view'} view
  * @returns {Promise<void>}
  */
-export async function changeViewTo(page, view) {
+export async function changeViewTo(page: Page, view: string) {
   await page.getByTitle('View Filter').getByRole('combobox').selectOption(view);
 }
 
@@ -154,7 +155,7 @@ export async function changeViewTo(page, view) {
  * @param {number} rowNumber
  * @returns {Promise<void>}
  */
-export async function selectFaultItem(page, rowNumber) {
+export async function selectFaultItem(page: Page, rowNumber: number) {
   await page
     .getByLabel('Select fault')
     .nth(rowNumber - 1)
@@ -171,7 +172,7 @@ export async function selectFaultItem(page, rowNumber) {
  * @param {number} rowNumber
  * @returns {import('@playwright/test').Locator}
  */
-export function getFault(page, rowNumber) {
+export function getFault(page: Page, rowNumber: number) {
   const fault = page.getByLabel('Fault triggered at').nth(rowNumber - 1);
 
   return fault;
@@ -182,7 +183,7 @@ export function getFault(page, rowNumber) {
  * @param {string} name
  * @returns {import('@playwright/test').Locator}
  */
-export function getFaultByName(page, name) {
+export function getFaultByName(page: Page, name: string) {
   const fault = page.getByLabel('Fault triggered at').filter({
     hasText: name
   });
@@ -195,7 +196,7 @@ export function getFaultByName(page, name) {
  * @param {number} rowNumber
  * @returns {Promise<string>}
  */
-export async function getFaultName(page, rowNumber) {
+export async function getFaultName(page: Page, rowNumber: number) {
   const faultName = await page
     .getByLabel('Fault name', { exact: true })
     .nth(rowNumber - 1)
@@ -209,7 +210,7 @@ export async function getFaultName(page, rowNumber) {
  * @param {number} rowNumber
  * @returns {Promise<string>}
  */
-export async function getFaultNamespace(page, rowNumber) {
+export async function getFaultNamespace(page: Page, rowNumber: number) {
   const faultNamespace = await page
     .getByLabel('Fault namespace')
     .nth(rowNumber - 1)
@@ -223,13 +224,13 @@ export async function getFaultNamespace(page, rowNumber) {
  * @param {number} rowNumber
  * @returns {Promise<string>}
  */
-export async function getFaultTriggerTime(page, rowNumber) {
+export async function getFaultTriggerTime(page: Page, rowNumber: number) {
   const faultTriggerTime = await page
     .getByLabel('Last Trigger Time')
     .nth(rowNumber - 1)
     .textContent();
 
-  return faultTriggerTime.toString().trim();
+  return (faultTriggerTime ?? '').trim();
 }
 
 /**
@@ -237,7 +238,7 @@ export async function getFaultTriggerTime(page, rowNumber) {
  * @param {number} rowNumber
  * @returns {Promise<void>}
  */
-export async function openFaultRowMenu(page, rowNumber) {
+export async function openFaultRowMenu(page: Page, rowNumber: number) {
   // select
   await page
     .getByLabel('Fault triggered at')
